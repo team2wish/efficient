@@ -7,6 +7,7 @@ exports.up = function (knex) {
     table.increments("id").primary();
     table.string("name").notNullable();
     table.boolean("isMain");
+    table.boolean("isSide");
     table.boolean("isSoup");
     table.boolean("isRice");
     table

@@ -69,7 +69,8 @@ erDiagram
     foods {
         int id PK
         string name "料理名"
-        boolean isMain "主菜か副菜か"
+        boolean isMain "主菜か"
+        boolean isSide "副菜か"
         boolean isSoup "汁物か"
         boolean isRice "ご飯か"
         int categoryId FK
@@ -109,7 +110,7 @@ erDiagram
       int id PK
       int userId FK "ユーザーIDで紐付け"
       int foodId FK "料理IDで紐付け"
-      date startWeek "調理週"
+      int startWeek "調理週"
       date date "調理日"
       int timingFlag "朝: 0, 昼: 1, 夕: 2"
     }
