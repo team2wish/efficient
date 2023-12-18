@@ -73,6 +73,7 @@ erDiagram
         boolean isSoup "汁物か"
         boolean isRice "ご飯か"
         int categoryId FK
+        int genreId FK
         boolean shrimp "えびアレルギー"
         boolean crab "かにアレルギー"
         boolean wheat "小麦アレルギー"
