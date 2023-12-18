@@ -110,7 +110,7 @@ erDiagram
       int id PK
       int userId FK "ユーザーIDで紐付け"
       int foodId FK "料理IDで紐付け"
-      int startWeek "調理週"
+      date startWeek "調理週"
       date date "調理日"
       int timingFlag "朝: 0, 昼: 1, 夕: 2"
     }

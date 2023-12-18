@@ -7,7 +7,7 @@ exports.up = function (knex) {
     table.increments("id").primary();
     table.integer("userId").unsigned().references("id").inTable("users");
     table.integer("foodId").unsigned().references("id").inTable("foods");
-    table.integer("startWeek");
+    table.date("startWeek");
     table.date("date");
     table.integer("timingFlag");
   });
