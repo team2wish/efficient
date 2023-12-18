@@ -73,12 +73,13 @@ erDiagram
         boolean isSoup "汁物か"
         boolean isRice "ご飯か"
         int categoryId FK
-        boolean allergy1 "アレルギー1"
-        boolean allergy2 "アレルギー2"
-        boolean allergy3 "アレルギー3"
-        boolean allergy4 "アレルギー4"
-        boolean allergy5 "アレルギー5"
-        boolean allergy6 "アレルギー6"
+        boolean shrimp "えびアレルギー"
+        boolean crab "かにアレルギー"
+        boolean wheat "小麦アレルギー"
+        boolean buckwheat_noodles "蕎麦アレルギー"
+        boolean egg "卵アレルギー"
+        boolean milk "乳アレルギー"
+        boolean peanut "落花生アレルギー"
     }
 
     categories {
@@ -94,12 +95,13 @@ erDiagram
       string hash "ハッシュ"
       int numOfAdults "大人の人数"
       int numOfChildren "子供の人数"
-      boolean allergy1 "アレルギー1"
-      boolean allergy2 "アレルギー2"
-      boolean allergy3 "アレルギー3"
-      boolean allergy4 "アレルギー4"
-      boolean allergy5 "アレルギー5"
-      boolean allergy6 "アレルギー6"
+      boolean shrimp "えびアレルギー"
+      boolean crab "かにアレルギー"
+      boolean wheat "小麦アレルギー"
+      boolean buckwheat_noodles "蕎麦アレルギー"
+      boolean egg "卵アレルギー"
+      boolean milk "乳アレルギー"
+      boolean peanut "落花生アレルギー"
     }
 
     menus {

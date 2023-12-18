@@ -4,7 +4,7 @@
  */
 exports.up = function (knex) {
   return knex.schema.createTable("images", function (table) {
-    table.integer("id").primary();
+    table.increments("id").primary();
     table.string("imagePath").notNullable();
   });
 };
