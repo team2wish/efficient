@@ -6,7 +6,12 @@ exports.up = function (knex) {
   return knex.schema.createTable("ingredientList", function (table) {
     table.increments("id").primary();
     table.string("name").notNullable();
-    table.integer("genreId").notNullable();
+    table
+      .integer("genreId")
+      .notNullable()
+      .unsigned()
+      .references("id")
+      .inTable("storeArea");
   });
 };
 

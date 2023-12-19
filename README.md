@@ -18,7 +18,7 @@ erDiagram
     cookKinds ||--o{ recipes : "kindId"
     recipes ||--o{ foods : "foodId"
     ingredientList ||--|{ ingredients : "ingredientId"
-    storeArea ||--o{ foods : "genreId"
+    storeArea ||--o{ ingredientList : "genreId"
     ingredients ||--|{ foods : "foodId"
     menus ||--|{ foods : "foodId"
     menus ||--|{ users : "userId"
@@ -57,7 +57,7 @@ erDiagram
     ingredientList {
         int id PK
         string name "食材名"
-        int genreId "買い物時の売り場区分け用ID"
+        int genreId FK "買い物時の売り場区分け用ID"
     }
 
     storeArea {
@@ -74,7 +74,6 @@ erDiagram
         boolean isSoup "汁物か"
         boolean isRice "ご飯か"
         int categoryId FK
-        int genreId FK
         boolean shrimp "えびアレルギー"
         boolean crab "かにアレルギー"
         boolean wheat "小麦アレルギー"

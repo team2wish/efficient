@@ -15,11 +15,6 @@ exports.up = function (knex) {
       .unsigned()
       .references("id")
       .inTable("categories");
-    table
-      .integer("genreId")
-      .unsigned()
-      .references("genreId")
-      .inTable("ingredientList");
     table.boolean("shrimp").defaultTo(false);
     table.boolean("crab").defaultTo(false);
     table.boolean("wheat").defaultTo(false);
