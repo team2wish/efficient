@@ -16,16 +16,16 @@
 erDiagram
     foods ||--o{ categories : "categoryId"
     ingredients ||--|{ foods : "foodId"
-    cookKinds ||--o{ recipes : "kindId"
+    cook_kinds ||--o{ recipes : "kindId"
     recipes ||--o{ foods : "foodId"
     images ||--|{ foods : "pictPathId"
-    ingredientList ||--|{ ingredients : "ingredientId"
+    ingredient_list ||--|{ ingredients : "ingredientId"
     menus ||--|{ foods : "foodId"
     images ||--o{ recipes : "imageId"
     menus ||--|{ users : "userId"
-    storeArea ||--o{ ingredientList : "genreId"
+    store_area ||--o{ ingredient_list : "genreId"
 
-    cookKinds {
+    cook_kinds {
         int id PK
         string kindName "作業区分(肉を切る など)"
         int priority "優先順位"
@@ -68,13 +68,13 @@ erDiagram
         string unit "単位"
     }
 
-    ingredientList {
+    ingredient_list {
         int id PK
         string name "食材名"
         int genreId FK "買い物時の売り場区分け用ID"
     }
 
-    storeArea {
+    store_area {
         int id PK
         string name "野菜・魚・肉など"
     }
