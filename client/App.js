@@ -9,6 +9,7 @@ import "react-native-gesture-handler";
 import SignupScreen from "./screens/SignupScreen";
 import MainRecipesListScreen from "./screens/MainRecipesListScreen";
 import SideRecipesListScreen from "./screens/SideRecipesListScreen";
+import SignupModalScreen from "./screens/SignupModalScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,13 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Signup" component={SignupScreen} />
+        <Stack.Screen
+          name="SignupModal"
+          component={SignupModalScreen}
+          options={{
+            presentation: "modal",
+          }}
+        />
         <Stack.Screen
           name="MainRecipesList"
           component={MainRecipesListScreen}
