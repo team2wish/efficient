@@ -3,16 +3,15 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.createTable("ingredients", function (table) {
+  return knex.schema.createTable("ingredient_list", function (table) {
     table.increments("id").primary();
-    table.integer("foodId").unsigned().references("id").inTable("foods");
+    table.string("name").notNullable();
     table
-      .integer("ingredientId")
+      .integer("genreId")
+      .notNullable()
       .unsigned()
       .references("id")
-      .inTable("ingredient_list");
-    table.float("quantity", 8, 2);
-    table.string("unit");
+      .inTable("store_area");
   });
 };
 
@@ -21,5 +20,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable("ingredients");
+  return knex.schema.dropTable("ingredient_list");
 };

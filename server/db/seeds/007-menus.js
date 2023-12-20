@@ -1,0 +1,130 @@
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+exports.seed = async function (knex) {
+  // Deletes ALL existing entries
+  await knex("menus").del();
+  await knex("menus").insert([
+    {
+      id: 1,
+      userId: 1,
+      foodId: 2,
+      startWeek: "2023-12-18",
+      date: "2023-12-18",
+      timingFlag: 2,
+    },
+    {
+      id: 2,
+      userId: 1,
+      foodId: 7,
+      startWeek: "2023-12-18",
+      date: "2023-12-18",
+      timingFlag: 2,
+    },
+    {
+      id: 3,
+      userId: 1,
+      foodId: 1,
+      startWeek: "2023-12-18",
+      date: "2023-12-18",
+      timingFlag: 2,
+    },
+    {
+      id: 4,
+      userId: 1,
+      foodId: 3,
+      startWeek: "2023-12-18",
+      date: "2023-12-19",
+      timingFlag: 2,
+    },
+    {
+      id: 5,
+      userId: 1,
+      foodId: 8,
+      startWeek: "2023-12-18",
+      date: "2023-12-19",
+      timingFlag: 2,
+    },
+    {
+      id: 6,
+      userId: 1,
+      foodId: 12,
+      startWeek: "2023-12-18",
+      date: "2023-12-19",
+      timingFlag: 2,
+    },
+    {
+      id: 7,
+      userId: 1,
+      foodId: 2,
+      startWeek: "2023-12-18",
+      date: "2023-12-20",
+      timingFlag: 2,
+    },
+    {
+      id: 8,
+      userId: 1,
+      foodId: 7,
+      startWeek: "2023-12-18",
+      date: "2023-12-20",
+      timingFlag: 2,
+    },
+    {
+      id: 9,
+      userId: 1,
+      foodId: 13,
+      startWeek: "2023-12-18",
+      date: "2023-12-20",
+      timingFlag: 2,
+    },
+    {
+      id: 10,
+      userId: 1,
+      foodId: 3,
+      startWeek: "2023-12-18",
+      date: "2023-12-21",
+      timingFlag: 2,
+    },
+    {
+      id: 11,
+      userId: 1,
+      foodId: 8,
+      startWeek: "2023-12-18",
+      date: "2023-12-21",
+      timingFlag: 2,
+    },
+    {
+      id: 12,
+      userId: 1,
+      foodId: 1,
+      startWeek: "2023-12-18",
+      date: "2023-12-21",
+      timingFlag: 2,
+    },
+    {
+      id: 13,
+      userId: 1,
+      foodId: 2,
+      startWeek: "2023-12-18",
+      date: "2023-12-22",
+      timingFlag: 2,
+    },
+    {
+      id: 14,
+      userId: 1,
+      foodId: 7,
+      startWeek: "2023-12-18",
+      date: "2023-12-22",
+      timingFlag: 2,
+    },
+    {
+      id: 15,
+      userId: 1,
+      foodId: 12,
+      startWeek: "2023-12-18",
+      date: "2023-12-22",
+      timingFlag: 2,
+    },
+  ]);
+};

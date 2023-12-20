@@ -3,9 +3,10 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.createTable("storeArea", function (table) {
+  return knex.schema.createTable("cook_kinds", function (table) {
     table.increments("id").primary();
-    table.string("name").notNullable();
+    table.string("kindName").notNullable();
+    table.integer("priority").notNullable();
   });
 };
 
@@ -14,5 +15,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable("storeArea");
+  return knex.schema.dropTable("cook_kinds");
 };
