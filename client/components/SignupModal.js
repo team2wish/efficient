@@ -36,6 +36,7 @@ const SignupModal = ({ navigation }) => {
       <Button title="ー" onPress={childrencountSub} />
       <Button title="＋" onPress={childrencountAdd} />
       <Text>アレルギー</Text>
+      <Text>チェックボックス実装予定</Text>
       <Button
         styles={styles.button}
         title="新規登録画面へ戻る"
