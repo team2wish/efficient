@@ -4,10 +4,10 @@
  */
 
 exports.seed = function (knex) {
-  return knex("cookKinds")
+  return knex("cook_kinds")
     .del()
     .then(function () {
-      return knex("cookKinds").insert([
+      return knex("cook_kinds").insert([
         { id: 1, kindName: "炊飯する", priority: 1 },
         { id: 2, kindName: "切らずに水の中に入れる", priority: 2 },
         { id: 3, kindName: "野菜を切る", priority: 3 },

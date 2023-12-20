@@ -4,10 +4,10 @@
  */
 
 exports.seed = function (knex) {
-  return knex("storeArea")
+  return knex("store_area")
     .del()
     .then(function () {
-      return knex("storeArea").insert([
+      return knex("store_area").insert([
         { id: 1, name: "青果" },
         { id: 2, name: "野菜" },
         { id: 3, name: "豆腐" },

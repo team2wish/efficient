@@ -8,7 +8,7 @@ exports.up = function (knex) {
     table.integer("foodId").unsigned().references("id").inTable("foods");
     table.string("text").notNullable();
     table.integer("imageId").unsigned().references("id").inTable("images");
-    table.integer("kindId").unsigned().references("id").inTable("cookKinds");
+    table.integer("kindId").unsigned().references("id").inTable("cook_kinds");
     table.integer("workTime");
     table.boolean("canWrap").notNullable();
   });
