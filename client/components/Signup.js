@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, Button, TextInput } from "react-native";
 
-const Signup = ({ navigation }) => {
+const Signup = ({ navigation, route }) => {
   const [name, setName] = useState("");
   const [mailAddress, setMailAddress] = useState("");
   const [password, setPassword] = useState("");
-  //   console.log(route);
+
+  //SignupModalから値取得は確認OK
+  // console.log("adultcount:", route.params[0]);
+  // console.log("childrencount:", route.params[1]);
+
   const onChangeName = (value) => {
     setName(value);
   };
@@ -15,6 +19,9 @@ const Signup = ({ navigation }) => {
   const onChangePassword = (value) => {
     setPassword(value);
   };
+
+  //name,mailaddres,password,adulucount,childrencount,allergy入力したらそのデータをバックへポストする
+  //未実装
 
   return (
     <View style={styles.container}>
