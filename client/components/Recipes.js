@@ -1,14 +1,15 @@
-import React from 'react';
-import { View, Text, Button, Image, StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import React, { useEffect } from "react";
+import { View, Text, Button, Image, StyleSheet } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import recipesApi from "../api/recipesApi";
 
 // const db = { path: require('../assets/testRecipeImg/照り焼きちきん.jpeg') };
-const img = require('../assets/testRecipeImg/照り焼きちきん.jpeg'); // 大事
+const img = require("../assets/testRecipeImg/照り焼きちきん.jpeg"); // 大事
 const testRecipes = [
   {
     id: 1,
-    date: '12/18(月)',
+    date: "12/18(月)",
     food: [
       {
         foodId: 1,
@@ -17,63 +18,71 @@ const testRecipes = [
       },
       {
         foodId: 2,
-        imgPath: require('../assets/testRecipeImg/なすと鶏肉の胡麻和え.jpeg'),
+        imgPath: require("../assets/testRecipeImg/なすと鶏肉の胡麻和え.jpeg"),
       },
-      { foodId: 3, imgPath: require('../assets/testRecipeImg/rice.jpeg') },
-      { foodId: 4, imgPath: require('../assets/testRecipeImg/味噌汁.jpeg') },
+      { foodId: 3, imgPath: require("../assets/testRecipeImg/rice.jpeg") },
+      { foodId: 4, imgPath: require("../assets/testRecipeImg/味噌汁.jpeg") },
     ],
   },
   {
     id: 2,
-    date: '12/19(火)',
+    date: "12/19(火)",
     food: [
       {
         foodId: 4,
-        imgPath: require('../assets/testRecipeImg/照り焼きちきん.jpeg'),
+        imgPath: require("../assets/testRecipeImg/照り焼きちきん.jpeg"),
       },
       {
         foodId: 5,
-        imgPath: require('../assets/testRecipeImg/なすと鶏肉の胡麻和え.jpeg'),
+        imgPath: require("../assets/testRecipeImg/なすと鶏肉の胡麻和え.jpeg"),
       },
-      { foodId: 6, imgPath: require('../assets/testRecipeImg/rice.jpeg') },
-      { foodId: 7, imgPath: require('../assets/testRecipeImg/味噌汁.jpeg') },
+      { foodId: 6, imgPath: require("../assets/testRecipeImg/rice.jpeg") },
+      { foodId: 7, imgPath: require("../assets/testRecipeImg/味噌汁.jpeg") },
     ],
   },
   {
     id: 3,
-    date: '12/20(水)',
+    date: "12/20(水)",
     food: [
       {
         foodId: 8,
-        imgPath: require('../assets/testRecipeImg/照り焼きちきん.jpeg'),
+        imgPath: require("../assets/testRecipeImg/照り焼きちきん.jpeg"),
       },
       {
         foodId: 9,
-        imgPath: require('../assets/testRecipeImg/なすと鶏肉の胡麻和え.jpeg'),
+        imgPath: require("../assets/testRecipeImg/なすと鶏肉の胡麻和え.jpeg"),
       },
-      { foodId: 10, imgPath: require('../assets/testRecipeImg/rice.jpeg') },
-      { foodId: 11, imgPath: require('../assets/testRecipeImg/味噌汁.jpeg') },
+      { foodId: 10, imgPath: require("../assets/testRecipeImg/rice.jpeg") },
+      { foodId: 11, imgPath: require("../assets/testRecipeImg/味噌汁.jpeg") },
     ],
   },
   {
     id: 4,
-    date: '12/21(木)',
+    date: "12/21(木)",
     food: [
       {
         foodId: 12,
-        imgPath: require('../assets/testRecipeImg/照り焼きちきん.jpeg'),
+        imgPath: require("../assets/testRecipeImg/照り焼きちきん.jpeg"),
       },
       {
         foodId: 13,
-        imgPath: require('../assets/testRecipeImg/なすと鶏肉の胡麻和え.jpeg'),
+        imgPath: require("../assets/testRecipeImg/なすと鶏肉の胡麻和え.jpeg"),
       },
-      { foodId: 14, imgPath: require('../assets/testRecipeImg/rice.jpeg') },
-      { foodId: 15, imgPath: require('../assets/testRecipeImg/味噌汁.jpeg') },
+      { foodId: 14, imgPath: require("../assets/testRecipeImg/rice.jpeg") },
+      { foodId: 15, imgPath: require("../assets/testRecipeImg/味噌汁.jpeg") },
     ],
   },
 ];
 
 const Recipes = ({ navigation }) => {
+  const getAllRecipes = async () => {
+    const data = await recipesApi.getAll();
+    console.log(data);
+  };
+  useEffect(() => {
+    getAllRecipes();
+  }, []);
+
   return (
     <View>
       <Text>12/18(月) ~ 12/22(金)</Text>
@@ -87,18 +96,18 @@ const Recipes = ({ navigation }) => {
                 <GestureHandlerRootView>
                   <ScrollView
                     horizontal={true}
-                    contentContainerStyle={{ flexDirection: 'row' }}
+                    contentContainerStyle={{ flexDirection: "row" }}
                   >
                     {dateRecipe.food.map((obj) => (
                       <View key={obj.foodId} style={{ marginRight: 8 }}>
                         <Image style={styles.recipeImg} source={obj.imgPath} />
                         <Button
                           title="12/10 主菜変更"
-                          onPress={() => navigation.navigate('MainRecipesList')}
+                          onPress={() => navigation.navigate("MainRecipesList")}
                         />
                         <Button
                           title="12/10 副菜変更"
-                          onPress={() => navigation.navigate('SideRecipesList')}
+                          onPress={() => navigation.navigate("SideRecipesList")}
                         />
                       </View>
                     ))}
