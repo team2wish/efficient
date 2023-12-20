@@ -15,24 +15,20 @@
 ```mermaid
 erDiagram
     foods ||--o{ categories : "categoryId"
+    ingredients ||--|{ foods : "foodId"
     cookKinds ||--o{ recipes : "kindId"
     recipes ||--o{ foods : "foodId"
+    images ||--|{ foods : "pictPathId"
     ingredientList ||--|{ ingredients : "ingredientId"
-    storeArea ||--o{ ingredientList : "genreId"
-    ingredients ||--|{ foods : "foodId"
     menus ||--|{ foods : "foodId"
-    menus ||--|{ users : "userId"
     images ||--o{ recipes : "imageId"
+    menus ||--|{ users : "userId"
+    storeArea ||--o{ ingredientList : "genreId"
 
     cookKinds {
         int id PK
         string kindName "作業区分(肉を切る など)"
         int priority "優先順位"
-    }
-
-    images {
-      int id PK
-      string imagePath "publicフォルダの画像名を格納"
     }
 
 
@@ -44,6 +40,24 @@ erDiagram
         int kindId FK
         int workTime "目安作業時間"
         boolean canWrap "他の作業トラップできるか"
+    }
+
+    foods {
+        int id PK
+        string name "料理名"
+        boolean isMain "主菜か"
+        boolean isSide "副菜か"
+        boolean isSoup "汁物か"
+        boolean isRice "ご飯か"
+        int categoryId FK
+        boolean shrimp "えびアレルギー"
+        boolean crab "かにアレルギー"
+        boolean wheat "小麦アレルギー"
+        boolean buckwheat_noodles "蕎麦アレルギー"
+        boolean egg "卵アレルギー"
+        boolean milk "乳アレルギー"
+        boolean peanut "落花生アレルギー"
+        string pictPathId FK "完成品メニュー画像パス"
     }
 
     ingredients {
@@ -65,22 +79,9 @@ erDiagram
         string name "野菜・魚・肉など"
     }
 
-
-    foods {
-        int id PK
-        string name "料理名"
-        boolean isMain "主菜か"
-        boolean isSide "副菜か"
-        boolean isSoup "汁物か"
-        boolean isRice "ご飯か"
-        int categoryId FK
-        boolean shrimp "えびアレルギー"
-        boolean crab "かにアレルギー"
-        boolean wheat "小麦アレルギー"
-        boolean buckwheat_noodles "蕎麦アレルギー"
-        boolean egg "卵アレルギー"
-        boolean milk "乳アレルギー"
-        boolean peanut "落花生アレルギー"
+    images {
+      int id PK
+      string imagePath "publicフォルダの画像名を格納"
     }
 
     categories {
