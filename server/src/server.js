@@ -18,6 +18,18 @@ const setupServer = () => {
     // res.sendFile("/index.html");
   });
 
+  app.get("/api/v1/recipes/search/:category", async (req, res) => {
+    console.log("req.params.category", req.params.category);
+
+    const getParams = req.params.category;
+    // カテゴリーに一致するfoodsを取得
+    const getCategoryList = await knex("foods").where(getParams, true);
+    console.log(getCategoryList);
+    res.status(200);
+    res.send("connect");
+    // res.sendFile("/index.html");
+  });
+
   // 最適化された手順を返す
   app.get("/api/v1/cooking", async (req, res) => {
     // 1.今日の日付を判定する
