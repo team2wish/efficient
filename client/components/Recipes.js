@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Button, Image, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -74,64 +74,96 @@ const testRecipes = [
   },
 ];
 
+// const Recipes = ({ navigation }) => {
+//   const getAllRecipes = async () => {
+//     const data = await recipesApi.getAll();
+//     recipes = data;
+//     console.log("data", recipes);
+//   };
+//   let recipes;
+//   useEffect(() => {
+//     getAllRecipes();
+//   }, []);
 const Recipes = ({ navigation }) => {
+  const [fiveRecipes, setFiveRexipes] = useState();
+
   const getAllRecipes = async () => {
-    const data = await recipesApi.getAll();
-    console.log(data);
+    const res = await recipesApi.getAll();
+    // console.log("data", res.data);
+    if (res.data) {
+      setFiveRexipes(res.data);
+    }
   };
+
   useEffect(() => {
     getAllRecipes();
   }, []);
 
+  // if (fiveRecipes !== undefined) {
+  //   setFiveRexipes(fiveRecipes.data);
+  //   // console.log("@@@@@@@@@@@@data", fiveRecipes.data);
+  // }
+  // console.log("@@@@@@@@@@@@22", fiveRecipes);
+
   return (
+    // <View>
+    //   {/* {console.log(fiveRecipes)} */}
+    //   {fiveRecipes ? fiveRecipes.map((data) => console.log(data)) : null}
+    // </View>
     <View>
       <Text>12/18(月) ~ 12/22(金)</Text>
       <GestureHandlerRootView>
         <ScrollView>
-          {testRecipes.map((dateRecipe) => {
-            // console.log(dateRecipe.date);
-            return (
-              <View key={dateRecipe.id}>
-                <Text>{dateRecipe.date}</Text>
-                <GestureHandlerRootView>
-                  <ScrollView
-                    horizontal={true}
-                    contentContainerStyle={{ flexDirection: "row" }}
-                  >
-                    {dateRecipe.food.map((obj) => (
-                      <View key={obj.foodId} style={{ marginRight: 8 }}>
-                        <Image style={styles.recipeImg} source={obj.imgPath} />
-                        <Button
-                          title="12/10 主菜変更"
-                          onPress={() => navigation.navigate("MainRecipesList")}
-                        />
-                        <Button
-                          title="12/10 副菜変更"
-                          onPress={() => navigation.navigate("SideRecipesList")}
-                        />
-                      </View>
-                    ))}
-                  </ScrollView>
-                </GestureHandlerRootView>
-              </View>
-            );
-          })}
+          {fiveRecipes &&
+            fiveRecipes.map((dateRecipe) => {
+              // console.log("daterecipe2", recipesData);
+              return (
+                <View key={dateRecipe.id}>
+                  <Text>{dateRecipe.date}</Text>
+                  <GestureHandlerRootView>
+                    <ScrollView
+                      horizontal={true}
+                      contentContainerStyle={{ flexDirection: "row" }}
+                    >
+                      {dateRecipe.food.map((foodDetail) => {
+                        // const imgPath = `../assets/serverRecipeImg/${foodDetail.imagePath}`;
+                        const imgPath = `../assets/testRecipeImg/照り焼きちきん.jpeg`;
+                        console.log(imgPath);
+                        return (
+                          <View
+                            key={foodDetail.foodId}
+                            style={{ marginRight: 8 }}
+                          >
+                            <Image
+                              style={styles.recipeImg}
+                              source={require(imgPath)}
+                            />
+                            {/* <Image
+                            style={styles.recipeImg}
+                            source={require("../assets/testRecipeImg/rice.jpeg")}
+                          /> */}
+                            <Button
+                              title="12/10 主菜変更"
+                              onPress={() =>
+                                navigation.navigate("MainRecipesList")
+                              }
+                            />
+                            <Button
+                              title="12/10 副菜変更"
+                              onPress={() =>
+                                navigation.navigate("SideRecipesList")
+                              }
+                            />
+                          </View>
+                        );
+                      })}
+                    </ScrollView>
+                  </GestureHandlerRootView>
+                </View>
+              );
+            })}
         </ScrollView>
       </GestureHandlerRootView>
-
-      {/* <Image source={require('../assets/testRecipeImg/照り焼きちきん.jpeg')} /> */}
-      {/* <Image
-        style={styles.recipeImg}
-        source={require('../assets/testRecipeImg/照り焼きちきん.jpeg')}
-      ></Image>
-      <Button
-        title="12/10 主菜変更"
-        onPress={() => navigation.navigate('MainRecipesList')}
-      />
-      <Button
-        title="12/10 副菜変更"
-        onPress={() => navigation.navigate('SideRecipesList')}
-      /> */}
     </View>
   );
 };
