@@ -19,6 +19,10 @@ let process = [
     processPic: '../assets/icon.png',
   },
 ];
+const imgPathArr = [
+  'aeru-abocado-tomato',
+  '../assets/testRecipeImg/aeru-comatsuna-jako.png',
+];
 
 const CookProcess = ({ navigation }) => {
   const [count, setCount] = useState(0);
@@ -28,9 +32,6 @@ const CookProcess = ({ navigation }) => {
   const getCookProcess = async () => {
     const res = await recipesApi.getCooking();
     setCookProcess(res.data);
-    if (cookProcess[count]) {
-      console.log(cookProcess[count].imagePath);
-    }
     // setImgPath(cookProcess[count].imagePath);
   };
 
@@ -64,17 +65,23 @@ const CookProcess = ({ navigation }) => {
           <Text>{cookProcess[count].name}</Text>
           <Text>count：{count}</Text>
           {/* <Image
-style={styles.recipiPic}
-source={require(cookProcess[count].imagePath)}
-/> */}
+            style={styles.recipiPic}
+            source={require(cookProcess[count].imagePath)}
+          /> */}
 
-          {console.log('cookProcess :', cookProcess[count])}
+          {/* {console.log('cookProcess :', cookProcess[count])}
           {console.log('==============')}
-          {console.log('imgPath :', cookProcess[count].imagePath)}
+          {console.log('imgPath :', cookProcess[count].imagePath)} */}
+          {console.log('imgPathArr :', imgPathArr[0])}
         </View>
         <View style={styles.processContainer}>
           <Text>{cookProcess[count].text}</Text>
-          <Image style={styles.processPic} source={7} />
+          {/* <Image
+            style={styles.processPic}
+            source={require(cookProcess[count].imagePath)}
+          /> */}
+          {/* <Image style={styles.processPic} source={imgPathArr[0]} /> */}
+          <Image style={styles.processPic} source={{ uri: imgPathArr[0] }} />
         </View>
         <View style={styles.viewControl}>
           {/* <Button title="Press to hear some words" onPress={speak} /> */}
