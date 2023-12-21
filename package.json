@@ -7,7 +7,7 @@
     "setup": "npm install && npm install --prefix client && npm install --prefix server",
     "start": "node ./server/src/index.js",
     "dev": "concurrently \"npm run dev --prefix client\" \"npm run watch --prefix client\" \"npm run dev --prefix server\"",
-    "build": "npm run setup && npm run start"
+    "build": "npm run setup && npm run"
   },
   "keywords": [],
   "author": "",
