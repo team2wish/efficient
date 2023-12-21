@@ -99,11 +99,10 @@ const setupServer = () => {
     const userId = 1; //[FIXME]: userIdは現状決め打ち
     const kondate = await knex("menus")
       .join("images", "menus.id", "=", "images.id")
-      // .join("recipes", "menus.foodId", "=", "recipes.foodId")
+      .join("foods", "menus.foodId", "=", "foods.id")
       .select()
       .where("userId", `${userId}`);
 
-    // console.log("kondate:", kondate);
     // 日付のarrを作る
     const dateList = [];
 
@@ -125,11 +124,30 @@ const setupServer = () => {
       const filteredKondate = kondate.filter(
         (item) => item.date.toLocaleDateString() === date
       );
-      returnObj.food = filteredKondate;
 
-      // console.log("filteredKondate", filteredKondate);
-      // const totalWorkTime = kondate.workTime.reduce((acc, cur) => acc + cur);
-      // returnObj.workTime = totalWorkTime;
+      const resFoodValueArr = filteredKondate.map((elem) => {
+        let selectCategory = "";
+        if (elem.isMain) {
+          selectCategory = "isMain";
+        } else if (elem.isSide) {
+          selectCategory = "isSide";
+        } else if (elem.isSoup) {
+          selectCategory = "isSoup";
+        } else if (elem.isRice) {
+          selectCategory = "isRice";
+        }
+
+        return {
+          id: elem.foodId,
+          category: selectCategory,
+          name: elem.name,
+          imagePath: elem.imagePath.split(".")[0],
+          timingFlag: elem.timingFlag,
+        };
+      });
+      console.log("resFoodValueArr: =====", resFoodValueArr);
+      returnObj.food = resFoodValueArr;
+
       result.push(returnObj);
     });
 
