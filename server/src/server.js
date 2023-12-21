@@ -66,12 +66,13 @@ const setupServer = () => {
       resultObj.name = elm.name;
       resultObj.text = elm.text;
       resultObj.workTime = elm.workTime;
-      resultObj.imagePath = elm.imagePath;
+      resultObj.imagePath = `../assets/testRecipeImg/${elm.imagePath}`;
       resultObj.completedDishImage = imagePathSelector(elm.pictPathId);
 
       cookProcess.push(resultObj);
     });
     // console.log("cookProcess:", cookProcess);
+    // "../assets/testRecipeImg/~~"
 
     res.status(200);
     res.send(cookProcess);
