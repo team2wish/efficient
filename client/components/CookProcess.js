@@ -1,8 +1,8 @@
-// import React from "react";
-import React, { useEffect, useState } from 'react';
-import Voice from '@react-native-voice/voice';
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, Image } from 'react-native';
-// import * as Speech from 'expo-speech';
+import recipesApi from '../api/recipesApi';
+import * as Speech from 'expo-speech';
 import '../assets/icon.png';
 
 let process = [
@@ -18,140 +18,71 @@ let process = [
     process: '鶏肉を切ります',
     processPic: '../assets/icon.png',
   },
-  {
-    recipiName: '鯖の味噌煮',
-    recipiPic: '../assets/icon.png',
-    process: '鶏肉を切ります',
-    processPic: '../assets/icon.png',
-  },
-  {
-    recipiName: '鯖の味噌煮',
-    recipiPic: '../assets/icon.png',
-    process: 'ページ変わりました',
-    processPic: '../assets/icon.png',
-  },
 ];
 
 const CookProcess = ({ navigation }) => {
   const [count, setCount] = useState(0);
-  const [recoding, setRecoding] = useState(false);
-  const [speaking, setSpeaking] = useState(false);
-  const [result, setResult] = useState('');
+  const [cookProcess, setCookProcess] = useState();
+  const [imgPath, setImgPath] = useState('');
 
-  const speechStartHandler = (e) => {
-    console.log('speech start');
-  };
-
-  const speechEndHandler = (e) => {
-    setRecoding(false);
-    console.log('speech end');
-  };
-
-  const speechResultsHandler = (e) => {
-    console.log('voice enent: ', e);
-    const text = e.value[0];
-    if (text.includes('次')) {
-      console.log('next');
-      setCount(count + 1);
-      // setResult('');
-    } else if (result.includes('前')) {
-      setCount(count - 1);
-      setResult('');
+  const getCookProcess = async () => {
+    const res = await recipesApi.getCooking();
+    setCookProcess(res.data);
+    if (cookProcess[count]) {
+      console.log(cookProcess[count].imagePath);
     }
-    // setResult(text);
-  };
-
-  const speechErrorHandler = (e) => {
-    console.log('speech error', e);
-  };
-
-  const startRecoding = async () => {
-    setRecoding(true);
-    try {
-      await Voice.start('ja-JP');
-    } catch (error) {
-      console.log('error: ', error);
-    }
-  };
-
-  const stopRecoding = async () => {
-    try {
-      await Voice.stop();
-      setRecoding(false);
-    } catch (error) {
-      console.log('error: ', error);
-    }
+    // setImgPath(cookProcess[count].imagePath);
   };
 
   useEffect(() => {
-    Voice.onSpeechStart = speechStartHandler;
-    Voice.onSpeechEnd = speechEndHandler;
-    Voice.onSpeechResults = speechResultsHandler;
-    Voice.onSpeechError = speechErrorHandler;
-    startRecoding();
-    return () => {
-      Voice.destroy().then(Voice.removeAllListeners);
-    };
+    getCookProcess();
   }, []);
 
-  // if (result.includes('次')) {
-  //   setCount(count + 1);
-  //   setResult('');
-  // } else if (result.includes('前')) {
-  //   setCount(count - 1);
-  //   setResult('');
-  // } else if (result.includes('関西')) {
-  //   stopRecoding();
-  //   setResult('');
-  // }
-
-  // useEffect(() => {
-  //   console.log('start');
-  //   startRecoding;
-  // }, []);
-
-  console.log('result :', result);
-  // const speak = () => {
-  //   const thingToSay = '豆腐を切って下さい';
-  //   Speech.speak(thingToSay);
-  // };
+  const speak = () => {
+    const thingToSay = '豆腐を切って下さい';
+    Speech.speak(thingToSay);
+  };
 
   const beforeProcess = () => {
     if (count > 0) {
       setCount(count - 1);
     }
   };
+
   const afterProcess = () => {
-    if (process.length > count) {
+    if (cookProcess.length > count) {
       setCount(count + 1);
     }
   };
 
+  // {"completedDishImage": "gohan.jpeg", "imagePath": "../assets/testRecipeImg/rice_wash.jpeg", "name": "ご飯", "text": "米を研ぎ、炊飯する。", "workTime": 35}
+
   return (
-    <View style={styles.container}>
-      <View style={styles.recipiContainer}>
-        <Text>{process[count].recipiName}</Text>
-        <Text>count：{count}</Text>
-        <Image
-          style={styles.recipiPic}
-          source={require('../assets/icon.png')}
-        />
+    cookProcess && (
+      <View style={styles.container}>
+        <View style={styles.recipiContainer}>
+          <Text>{cookProcess[count].name}</Text>
+          <Text>count：{count}</Text>
+          {/* <Image
+style={styles.recipiPic}
+source={require(cookProcess[count].imagePath)}
+/> */}
+
+          {console.log('cookProcess :', cookProcess[count])}
+          {console.log('==============')}
+          {console.log('imgPath :', cookProcess[count].imagePath)}
+        </View>
+        <View style={styles.processContainer}>
+          <Text>{cookProcess[count].text}</Text>
+          <Image style={styles.processPic} source={7} />
+        </View>
+        <View style={styles.viewControl}>
+          {/* <Button title="Press to hear some words" onPress={speak} /> */}
+          <Button title="前へ" onPress={beforeProcess} />
+          <Button title="次へ" onPress={afterProcess} />
+        </View>
       </View>
-      <View style={styles.processContainer}>
-        <Text>{process[count].process}</Text>
-        <Image
-          style={styles.processPic}
-          source={require('../assets/icon.png')}
-        />
-      </View>
-      <View style={styles.viewControl}>
-        {/* <Button title="Press to hear some words" onPress={speak} /> */}
-        <Button title="前へ" onPress={beforeProcess} />
-        <Button title="次へ" onPress={afterProcess} />
-        <Button title="録音" onPress={startRecoding} />
-        <Button title="停止" onPress={stopRecoding} />
-      </View>
-    </View>
+    )
   );
 };
 
