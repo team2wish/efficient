@@ -22,6 +22,7 @@ exports.up = function (knex) {
     table.boolean("egg").defaultTo(false);
     table.boolean("milk").defaultTo(false);
     table.boolean("peanut").defaultTo(false);
+    table.integer("pictPathId").unsigned().references("id").inTable("images");
   });
 };
 

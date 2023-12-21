@@ -15,24 +15,20 @@
 ```mermaid
 erDiagram
     foods ||--o{ categories : "categoryId"
-    cookKinds ||--o{ recipes : "kindId"
-    recipes ||--o{ foods : "foodId"
-    ingredientList ||--|{ ingredients : "ingredientId"
-    storeArea ||--o{ ingredientList : "genreId"
     ingredients ||--|{ foods : "foodId"
+    cook_kinds ||--o{ recipes : "kindId"
+    recipes ||--o{ foods : "foodId"
+    images ||--|{ foods : "pictPathId"
+    ingredient_list ||--|{ ingredients : "ingredientId"
     menus ||--|{ foods : "foodId"
-    menus ||--|{ users : "userId"
     images ||--o{ recipes : "imageId"
+    menus ||--|{ users : "userId"
+    store_area ||--o{ ingredient_list : "genreId"
 
-    cookKinds {
+    cook_kinds {
         int id PK
         string kindName "作業区分(肉を切る など)"
         int priority "優先順位"
-    }
-
-    images {
-      int id PK
-      string imagePath "publicフォルダの画像名を格納"
     }
 
 
@@ -45,26 +41,6 @@ erDiagram
         int workTime "目安作業時間"
         boolean canWrap "他の作業トラップできるか"
     }
-
-    ingredients {
-        int id PK
-        int foodId FK
-        int ingredientId FK
-        float quantity "数量"
-        string unit "単位"
-    }
-
-    ingredientList {
-        int id PK
-        string name "食材名"
-        int genreId FK "買い物時の売り場区分け用ID"
-    }
-
-    storeArea {
-        int id PK
-        string name "野菜・魚・肉など"
-    }
-
 
     foods {
         int id PK
@@ -81,6 +57,31 @@ erDiagram
         boolean egg "卵アレルギー"
         boolean milk "乳アレルギー"
         boolean peanut "落花生アレルギー"
+        string pictPathId FK "完成品メニュー画像パス"
+    }
+
+    ingredients {
+        int id PK
+        int foodId FK
+        int ingredientId FK
+        float quantity "数量"
+        string unit "単位"
+    }
+
+    ingredient_list {
+        int id PK
+        string name "食材名"
+        int genreId FK "買い物時の売り場区分け用ID"
+    }
+
+    store_area {
+        int id PK
+        string name "野菜・魚・肉など"
+    }
+
+    images {
+      int id PK
+      string imagePath "publicフォルダの画像名を格納"
     }
 
     categories {
