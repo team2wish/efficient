@@ -1,5 +1,6 @@
 const { setupServer } = require("./server");
 const cors = require("cors");
+require("dotenv").config();
 
 const server = setupServer();
 const PORT = process.env.PORT || 3000;
