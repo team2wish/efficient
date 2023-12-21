@@ -24,7 +24,7 @@ module.exports = {
     seeds: { directory: "./db/seeds" },
   },
   production: {
-    client: "pgsql",
+    client: "pg",
     connection: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
     migrations: {
