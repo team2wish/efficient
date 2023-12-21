@@ -78,8 +78,10 @@ const setupServer = () => {
       resultObj.name = elm.name;
       resultObj.text = elm.text;
       resultObj.workTime = elm.workTime;
-      resultObj.imagePath = `../assets/testRecipeImg/${elm.imagePath}`;
-      resultObj.completedDishImage = imagePathSelector(elm.pictPathId);
+      resultObj.imagePath = elm.imagePath.split(".")[0];
+      resultObj.completedDishImage = imagePathSelector(elm.pictPathId).split(
+        "."
+      )[0];
 
       cookProcess.push(resultObj);
     });
@@ -92,7 +94,7 @@ const setupServer = () => {
   });
 
   // 5日分の献立を返す
-  app.get("/api/v1/recipes", async (req, res) => {
+  app.get("/api/v1/recipes/all", async (req, res) => {
     // [FIXME] DBにデータがない場合ランダムで選択する処理が足りていない
     const userId = 1; //[FIXME]: userIdは現状決め打ち
     const kondate = await knex("menus")
