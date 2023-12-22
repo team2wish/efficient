@@ -15,7 +15,6 @@ const setupServer = () => {
   app.get("/", (req, res) => {
     res.status(200);
     res.send("connect");
-    // res.sendFile("/index.html");
   });
 
   app.get("/api/v1/recipes/search/:category", async (req, res) => {
@@ -23,10 +22,14 @@ const setupServer = () => {
 
     const getParams = req.params.category;
     // カテゴリーに一致するfoodsを取得
-    const getCategoryList = await knex("foods").where(getParams, true);
-    console.log(getCategoryList);
+    const getCategoryList = await knex("foods")
+      .where(getParams, true)
+      .join("recipes", "foods.id", "=", "recipes.foodId")
+      .join("cook_kinds", "recipes.kindId", "=", "cook_kinds.id")
+      .join("images", "imageId", "=", "images.id");
+    // console.log(getCategoryList);
     res.status(200);
-    res.send("connect");
+    res.send(getCategoryList);
     // res.sendFile("/index.html");
   });
 
