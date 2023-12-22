@@ -24,13 +24,21 @@ const setupServer = () => {
     // カテゴリーに一致するfoodsを取得
     const getCategoryList = await knex("foods")
       .where(getParams, true)
-      .join("recipes", "foods.id", "=", "recipes.foodId")
-      .join("cook_kinds", "recipes.kindId", "=", "cook_kinds.id")
-      .join("images", "imageId", "=", "images.id");
-    // console.log(getCategoryList);
+      .join("images", "pictPathId", "=", "images.id");
+
+    // [FIXME]: timeはテーブル修正後にちゃんと出す。今は１５分のダミー
+    const result = getCategoryList.map((elem) => {
+      return {
+        foodId: elem.id,
+        name: elem.name,
+        category: getParams,
+        imagePath: elem.imagePath.split(".")[0],
+        time: 15,
+      };
+    });
+
     res.status(200);
-    res.send(getCategoryList);
-    // res.sendFile("/index.html");
+    res.send(result);
   });
 
   // 最適化された手順を返す
@@ -52,12 +60,8 @@ const setupServer = () => {
       .join("images", "foods.pictPathId", "=", "images.id")
       .whereIn("foods.id", foodIdArr);
 
-    // console.log("foodsImgArr: ", foodsImgArr);
-
     function imagePathSelector(num) {
-      // console.log("num: ", num);
       const selectObj = foodsImgArr.filter((elem) => elem.id === num);
-      // console.log("selectObj: ", selectObj);
       return selectObj[0].imagePath;
     }
     // 4.foodIdから調理手順を取得する(このときにjoinが必要になるはず)
@@ -68,13 +72,10 @@ const setupServer = () => {
       .join("recipes", "foods.id", "=", "recipes.foodId")
       .join("cook_kinds", "recipes.kindId", "=", "cook_kinds.id")
       .join("images", "imageId", "=", "images.id");
-    // console.log("foodsDataArr: ", foodsDataArr);
 
     // 6.優先順位を使ってソートする
     const sortFoodsData = foodsDataArr.sort((a, b) => a.priority - b.priority);
-    // console.log("sortFoodsData:", sortFoodsData);
     // 7.client所望の形でレスポンスを返す
-    // name,text,workTime,imagePath
     const cookProcess = [];
     sortFoodsData.map((elm) => {
       const resultObj = {};
@@ -88,12 +89,9 @@ const setupServer = () => {
 
       cookProcess.push(resultObj);
     });
-    // console.log("cookProcess:", cookProcess);
-    // "../assets/testRecipeImg/~~"
 
     res.status(200);
     res.send(cookProcess);
-    // res.sendFile("/index.html");
   });
 
   // 5日分の献立を返す
@@ -115,7 +113,6 @@ const setupServer = () => {
         dateList.push(selectDate);
       }
     });
-    // console.log("dateList: ", dateList);
 
     const result = [];
 
