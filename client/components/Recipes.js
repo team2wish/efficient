@@ -5,19 +5,24 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
 
 const Recipes = ({ navigation }) => {
-  const [fiveRecipes, setFiveRexipes] = useState();
+  const [fiveRecipes, setFiveRecipes] = useState();
 
   const getAllRecipes = async () => {
     const res = await recipesApi.getAll();
     // console.log("data", res.data);
     if (res.data) {
-      setFiveRexipes(res.data);
+      setFiveRecipes(res.data);
     }
   };
 
   useEffect(() => {
     getAllRecipes();
   }, []);
+
+  const changeRecipes = (e) => {
+    // console.log("e-------", e.target);
+    navigation.navigate("MainRecipesList");
+  };
 
   return (
     <View style={styles.container}>
@@ -28,7 +33,7 @@ const Recipes = ({ navigation }) => {
             fiveRecipes.map((dateRecipe) => {
               // console.log("daterecipe2", recipesData);
               return (
-                <View key={dateRecipe.id}>
+                <View key={dateRecipe.id} style={styles.recipes__days}>
                   <Text style={styles.header__days}>
                     　{dateRecipe.date.slice(5)} 　　30分以内
                   </Text>
@@ -42,19 +47,21 @@ const Recipes = ({ navigation }) => {
                         const imgPath = foodDetail.imagePath;
                         return (
                           <View
+                            style={styles.recipeContainer}
                             key={foodDetail.foodId}
-                            style={{ marginRight: 8 }}
+                            // style={{ marginRight: 8 }}
                           >
                             <Image
                               style={styles.recipeImg}
                               source={{ uri: imgPath }}
                             />
+                            <Text numberOfLines={1} ellipsizeMode="tail">
+                              {foodDetail.name}
+                            </Text>
                             <Button
                               title="変更"
                               color="red"
-                              onPress={() =>
-                                navigation.navigate("MainRecipesList")
-                              }
+                              onPress={changeRecipes}
                             />
                             {/* <Button
                               title="12/10 副菜変更"
@@ -83,6 +90,14 @@ const styles = StyleSheet.create({
   header__top: {
     marginBottom: 10,
     fontSize: 20,
+  },
+  recipes__days: {
+    borderWidth: 1,
+  },
+  recipeContainer: {
+    width: 120,
+    marginRight: 8,
+    // borderWidth: 1,
   },
   header__days: {
     fontSize: 20,
