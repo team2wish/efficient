@@ -7,23 +7,22 @@ import recipesApi from "../api/recipesApi";
 const MainRecipesList = ({ navigation }) => {
   const [Recipes, setRecipes] = useState();
 
-  const changeRecipes = async () => {
-    const res = await recipesApi.changeRecipes();
-    console.log("data", res.data);
+  const anotherRecipes = async () => {
+    const res = await recipesApi.changeMainRecipes();
+    // console.log("data", res.data);
     if (res.data) {
       setRecipes(res.data);
     }
   };
 
+  const changeRecipes = () => {
+    console.log("mainRecipeをpost");
+  };
+
   useEffect(() => {
-    changeRecipes();
+    anotherRecipes();
   }, []);
 
-  // return (
-  //   <View>
-  //     <Text>main</Text>
-  //   </View>
-  // );
   return (
     <View style={styles.container}>
       <GestureHandlerRootView>
@@ -33,30 +32,26 @@ const MainRecipesList = ({ navigation }) => {
               // console.log("daterecipe2", recipesData);
               return (
                 <View key={dateRecipe.foodId} style={styles.recipes__days}>
-                  <GestureHandlerRootView>
+                  {/* <GestureHandlerRootView>
                     <ScrollView
                       horizontal={true}
                       contentContainerStyle={{ flexDirection: "row" }}
-                    >
-                      <View
-                        style={styles.recipeContainer}
-                        // key={foodDetail.foodId}
-                      >
-                        <Image
-                          style={styles.recipeImg}
-                          source={{ uri: dateRecipe.imagePath }}
-                        />
-                        <Text numberOfLines={1} ellipsizeMode="tail">
-                          {dateRecipe.name}
-                        </Text>
-                        <Button
-                          title="選択"
-                          color="red"
-                          onPress={changeRecipes}
-                        />
-                      </View>
-                    </ScrollView>
-                  </GestureHandlerRootView>
+                    > */}
+                  <View
+                    style={styles.recipeContainer}
+                    // key={foodDetail.foodId}
+                  >
+                    <Image
+                      style={styles.recipeImg}
+                      source={{ uri: dateRecipe.imagePath }}
+                    />
+                    <Text numberOfLines={1} ellipsizeMode="tail">
+                      {dateRecipe.name}
+                    </Text>
+                    <Button title="選択" color="red" onPress={changeRecipes} />
+                  </View>
+                  {/* </ScrollView>
+                  </GestureHandlerRootView> */}
                 </View>
               );
             })}
@@ -75,6 +70,7 @@ const styles = StyleSheet.create({
   },
   recipes__days: {
     borderWidth: 1,
+    width: 150,
   },
   recipeContainer: {
     width: 120,

@@ -19,9 +19,13 @@ const Recipes = ({ navigation }) => {
     getAllRecipes();
   }, []);
 
-  const changeRecipes = (e) => {
+  const changeMainRecipes = (e) => {
     // console.log("e-------", e.target);
     navigation.navigate("MainRecipesList");
+  };
+  const changeSideRecipes = (e) => {
+    // console.log("e-------", e.target);
+    navigation.navigate("SideRecipesList");
   };
 
   return (
@@ -49,7 +53,6 @@ const Recipes = ({ navigation }) => {
                           <View
                             style={styles.recipeContainer}
                             key={foodDetail.foodId}
-                            // style={{ marginRight: 8 }}
                           >
                             <Image
                               style={styles.recipeImg}
@@ -58,11 +61,19 @@ const Recipes = ({ navigation }) => {
                             <Text numberOfLines={1} ellipsizeMode="tail">
                               {foodDetail.name}
                             </Text>
-                            <Button
-                              title="変更"
-                              color="red"
-                              onPress={changeRecipes}
-                            />
+                            {foodDetail.category === "isMain" ? (
+                              <Button
+                                title="変更"
+                                color="red"
+                                onPress={changeMainRecipes}
+                              />
+                            ) : (
+                              <Button
+                                title="変更"
+                                color="red"
+                                onPress={changeSideRecipes}
+                              />
+                            )}
                             {/* <Button
                               title="12/10 副菜変更"
                               onPress={() =>
