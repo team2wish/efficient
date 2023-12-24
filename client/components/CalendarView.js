@@ -12,7 +12,7 @@ const CalenderScreen = ({ navigation }) => {
       <Button title="ユーザ" onPress={() => navigation.navigate("User")} />
       <Button
         title="5日分レシピ作成"
-        onPress={() => navigation.navigate("Recipes")}
+        onPress={() => navigation.navigate("献立")}
       />
     </View>
   );
