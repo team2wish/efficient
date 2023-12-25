@@ -15,7 +15,6 @@ const setupServer = () => {
   app.get("/", (req, res) => {
     res.status(200);
     res.send("connect");
-    // res.sendFile("/index.html");
   });
 
   app.get("/api/v1/recipes/search/:category", async (req, res) => {
@@ -23,11 +22,23 @@ const setupServer = () => {
 
     const getParams = req.params.category;
     // カテゴリーに一致するfoodsを取得
-    const getCategoryList = await knex("foods").where(getParams, true);
-    console.log(getCategoryList);
+    const getCategoryList = await knex("foods")
+      .where(getParams, true)
+      .join("images", "pictPathId", "=", "images.id");
+
+    // [FIXME]: timeはテーブル修正後にちゃんと出す。今は１５分のダミー
+    const result = getCategoryList.map((elem) => {
+      return {
+        foodId: elem.id,
+        name: elem.name,
+        category: getParams,
+        imagePath: elem.imagePath.split(".")[0],
+        time: 15,
+      };
+    });
+
     res.status(200);
-    res.send("connect");
-    // res.sendFile("/index.html");
+    res.send(result);
   });
 
   // 最適化された手順を返す
@@ -49,12 +60,8 @@ const setupServer = () => {
       .join("images", "foods.pictPathId", "=", "images.id")
       .whereIn("foods.id", foodIdArr);
 
-    // console.log("foodsImgArr: ", foodsImgArr);
-
     function imagePathSelector(num) {
-      // console.log("num: ", num);
       const selectObj = foodsImgArr.filter((elem) => elem.id === num);
-      // console.log("selectObj: ", selectObj);
       return selectObj[0].imagePath;
     }
     // 4.foodIdから調理手順を取得する(このときにjoinが必要になるはず)
@@ -65,13 +72,10 @@ const setupServer = () => {
       .join("recipes", "foods.id", "=", "recipes.foodId")
       .join("cook_kinds", "recipes.kindId", "=", "cook_kinds.id")
       .join("images", "imageId", "=", "images.id");
-    // console.log("foodsDataArr: ", foodsDataArr);
 
     // 6.優先順位を使ってソートする
     const sortFoodsData = foodsDataArr.sort((a, b) => a.priority - b.priority);
-    // console.log("sortFoodsData:", sortFoodsData);
     // 7.client所望の形でレスポンスを返す
-    // name,text,workTime,imagePath
     const cookProcess = [];
     sortFoodsData.map((elm) => {
       const resultObj = {};
@@ -85,12 +89,9 @@ const setupServer = () => {
 
       cookProcess.push(resultObj);
     });
-    // console.log("cookProcess:", cookProcess);
-    // "../assets/testRecipeImg/~~"
 
     res.status(200);
     res.send(cookProcess);
-    // res.sendFile("/index.html");
   });
 
   // 5日分の献立を返す
@@ -99,11 +100,10 @@ const setupServer = () => {
     const userId = 1; //[FIXME]: userIdは現状決め打ち
     const kondate = await knex("menus")
       .join("images", "menus.id", "=", "images.id")
-      // .join("recipes", "menus.foodId", "=", "recipes.foodId")
+      .join("foods", "menus.foodId", "=", "foods.id")
       .select()
       .where("userId", `${userId}`);
 
-    // console.log("kondate:", kondate);
     // 日付のarrを作る
     const dateList = [];
 
@@ -113,7 +113,6 @@ const setupServer = () => {
         dateList.push(selectDate);
       }
     });
-    // console.log("dateList: ", dateList);
 
     const result = [];
 
@@ -125,11 +124,30 @@ const setupServer = () => {
       const filteredKondate = kondate.filter(
         (item) => item.date.toLocaleDateString() === date
       );
-      returnObj.food = filteredKondate;
 
-      // console.log("filteredKondate", filteredKondate);
-      // const totalWorkTime = kondate.workTime.reduce((acc, cur) => acc + cur);
-      // returnObj.workTime = totalWorkTime;
+      const resFoodValueArr = filteredKondate.map((elem) => {
+        let selectCategory = "";
+        if (elem.isMain) {
+          selectCategory = "isMain";
+        } else if (elem.isSide) {
+          selectCategory = "isSide";
+        } else if (elem.isSoup) {
+          selectCategory = "isSoup";
+        } else if (elem.isRice) {
+          selectCategory = "isRice";
+        }
+
+        return {
+          id: elem.foodId,
+          category: selectCategory,
+          name: elem.name,
+          imagePath: elem.imagePath.split(".")[0],
+          timingFlag: elem.timingFlag,
+        };
+      });
+      console.log("resFoodValueArr: =====", resFoodValueArr);
+      returnObj.food = resFoodValueArr;
+
       result.push(returnObj);
     });
 

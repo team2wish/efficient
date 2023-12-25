@@ -5,7 +5,7 @@ import { useRoute } from "@react-navigation/native";
 
 const SignupScreen = ({ navigation }) => {
   const route = useRoute();
-  console.log("route:", route);
+  // console.log("route:", route);
   return <Signup navigation={navigation} route={route} />;
 };
 
