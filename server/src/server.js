@@ -172,12 +172,13 @@ const setupServer = () => {
     const startWeek = calcStartWeekDate();
     const userId = 1; //[FIXME]: userIdは現状決め打ち
     const kondate = await knex("menus")
-      .join("images", "menus.id", "=", "images.id")
       .join("foods", "menus.foodId", "=", "foods.id")
+      .join("images", "foods.pictPathId", "=", "images.id")
       .select("menus.*", "images.*", "foods.*")
       .where("userId", `${userId}`)
       .where("menus.startWeek", startWeek);
 
+    console.log("kondate", kondate);
     // １.kondate.lengthが０かどうか？
     if (kondate.length === 0) {
       console.log("しゃーねーな。");
@@ -225,7 +226,7 @@ const setupServer = () => {
           timingFlag: elem.timingFlag,
         };
       });
-      console.log("resFoodValueArr: =====", resFoodValueArr);
+      // console.log("resFoodValueArr: =====", resFoodValueArr);
       returnObj.food = resFoodValueArr;
 
       result.push(returnObj);
