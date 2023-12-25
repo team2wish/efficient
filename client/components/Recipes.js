@@ -23,8 +23,8 @@ const Recipes = ({ navigation }) => {
     // console.log("e-------", beforeId, date);
     navigation.navigate("MainRecipesList", [date, beforeId]);
   };
-  const changeSideRecipes = (e) => {
-    // console.log("e-------", e.target);
+  const changeSideRecipes = (beforeId, date) => {
+    // console.log("e-------side", beforeId, date);
     navigation.navigate("SideRecipesList");
   };
 
@@ -76,7 +76,12 @@ const Recipes = ({ navigation }) => {
                               <Button
                                 title="変更"
                                 color="red"
-                                onPress={changeSideRecipes}
+                                onPress={() =>
+                                  changeSideRecipes(
+                                    foodDetail.id,
+                                    dateRecipe.date
+                                  )
+                                }
                               />
                             )}
                           </View>
