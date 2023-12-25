@@ -178,7 +178,6 @@ const setupServer = () => {
       .where("userId", `${userId}`)
       .where("menus.startWeek", startWeek);
 
-    console.log("kondate", kondate);
     // １.kondate.lengthが０かどうか？
     if (kondate.length === 0) {
       console.log("しゃーねーな。");
