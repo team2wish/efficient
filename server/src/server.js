@@ -17,6 +17,39 @@ const setupServer = () => {
     res.send("connect");
   });
 
+  app.put(
+    "/api/v1/recipes/:year/:month/:date/:beforeFoodId/:afterFoodId",
+    async (req, res) => {
+      // date, beforeFoodIdを使ってwhere句で絞る
+      const isSuccess = await knex("menus")
+        .where(
+          "menus.date",
+          `${req.params.year}/${req.params.month}/${req.params.date}`
+        )
+        .where("menus.foodId", `${req.params.beforeFoodId}`)
+        // afterFoodIdを使って値を変更する
+        .update({
+          foodId: req.params.afterFoodId,
+        });
+
+      const afterData = await knex("menus")
+        .where(
+          "menus.date",
+          `${req.params.year}/${req.params.month}/${req.params.date}`
+        )
+        .where("menus.foodId", `${req.params.afterFoodId}`);
+      console.log("afterData: ", afterData);
+
+      if (isSuccess === 1) {
+        res.status(200);
+        res.send("メニューの変更が完了しました");
+      } else {
+        res.status(500);
+        res.send("変更にエラーが発生しました");
+      }
+    }
+  );
+
   app.get("/api/v1/recipes/search/:category", async (req, res) => {
     console.log("req.params.category", req.params.category);
 
