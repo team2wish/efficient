@@ -32,13 +32,14 @@ const setupServer = () => {
           foodId: req.params.afterFoodId,
         });
 
-      const afterData = await knex("menus")
-        .where(
-          "menus.date",
-          `${req.params.year}/${req.params.month}/${req.params.date}`
-        )
-        .where("menus.foodId", `${req.params.afterFoodId}`);
-      console.log("afterData: ", afterData);
+      // 確認用
+      // const afterData = await knex("menus")
+      //   .where(
+      //     "menus.date",
+      //     `${req.params.year}/${req.params.month}/${req.params.date}`
+      //   )
+      //   .where("menus.foodId", `${req.params.afterFoodId}`);
+      // console.log("afterData: ", afterData);
 
       if (isSuccess === 1) {
         res.status(200);
@@ -51,13 +52,14 @@ const setupServer = () => {
   );
 
   app.get("/api/v1/recipes/search/:category", async (req, res) => {
-    console.log("req.params.category", req.params.category);
+    // console.log("req.params.category", req.params.category);
 
     const getParams = req.params.category;
     // カテゴリーに一致するfoodsを取得
     const getCategoryList = await knex("foods")
+      .select("foods.*", "images.imagePath")
       .where(getParams, true)
-      .join("images", "pictPathId", "=", "images.id");
+      .join("images", "images.id", "=", "foods.pictPathId");
 
     // [FIXME]: timeはテーブル修正後にちゃんと出す。今は１５分のダミー
     const result = getCategoryList.map((elem) => {
@@ -89,7 +91,7 @@ const setupServer = () => {
 
     // 完成品の料理パスを取得
     const foodsImgArr = await knex("foods")
-      .select()
+      .select("foods.*", "images.*")
       .join("images", "foods.pictPathId", "=", "images.id")
       .whereIn("foods.id", foodIdArr);
 
@@ -100,7 +102,7 @@ const setupServer = () => {
     // 4.foodIdから調理手順を取得する(このときにjoinが必要になるはず)
     // 5.各料理の調理手順を全てつなげる
     const foodsDataArr = await knex("foods")
-      .select()
+      .select("foods.*", "recipes.*", "cook_kinds.*", "images.*")
       .whereIn("foodId", foodIdArr)
       .join("recipes", "foods.id", "=", "recipes.foodId")
       .join("cook_kinds", "recipes.kindId", "=", "cook_kinds.id")
@@ -186,6 +188,79 @@ const setupServer = () => {
 
     res.status(200);
     res.send(result);
+  });
+
+  app.get("/api/v1/shopping", async (req, res) => {
+    // ０.frontからどの週のデータがみたいのか確認する。無いなら強制的に今週にしちゃう。
+    // FIXME: 決め打ちで2023/12/18の週だけ表示にしておくが週ごとの表示が欲しくなるはず
+    const startWeek = "2023/12/18";
+    const groupArr = [
+      "menus.id",
+      "ingredient_list.genreId",
+      "ingredient_list.name",
+      "quantity",
+      "unit",
+    ];
+
+    // １.いっぱいテーブルつなげる
+    const joinData = await knex("menus")
+      .join("foods", "menus.foodId", "=", "foods.id")
+      .join("ingredients", "ingredients.foodId", "=", "foods.id")
+      .join(
+        "ingredient_list",
+        "ingredients.ingredientId",
+        "=",
+        "ingredient_list.id"
+      )
+      .join("store_area", "ingredient_list.genreId", "=", "store_area.id")
+      // ２.その週のデータで絞る
+      .where("menus.startWeek", startWeek)
+      // ３.ストアの商品カテゴリーごとにまとめる
+      .groupBy(groupArr)
+      .select(groupArr);
+    // .groupBy([
+    //   "menus.id",
+    //   "foods.id",
+    //   "ingredients.id",
+    //   "ingredient_list.id",
+    //   "store_area.id",
+    //   "ingredient_list.genreId",
+    // ]);
+
+    console.log("joinData: ", joinData);
+
+    // 仮の値を設定。実際のアプリケーションでは動的に値を設定してください。
+    const specificStartWeek = "2023-12-18"; // 特定の週の日付
+
+    const shoppingList = await knex("menus")
+      .join("foods", "menus.foodId", "foods.id")
+      .join("ingredients", "foods.id", "ingredients.foodId")
+      .join("ingredient_list", "ingredients.ingredientId", "ingredient_list.id")
+      .join("store_area", "ingredient_list.genreId", "store_area.id")
+      .select(
+        "store_area.name as store_section",
+        "ingredient_list.name as ingredient_name",
+        knex.raw("SUM(ingredients.quantity) as total_quantity"),
+        "ingredients.unit"
+      )
+      .where("menus.startWeek", specificStartWeek) // 特定の週を基準にフィルタリング
+      .groupBy(
+        "store_area.id",
+        "store_section",
+        "ingredient_name",
+        "ingredients.unit"
+      ) // グループ化
+      .orderBy("store_area.id", "ingredient_name"); // 並び替え
+    // .orderBy("store_section", "ingredient_name"); // 並び替え
+
+    // 結果を表示または操作
+    // console.log("shoppingList: ", shoppingList);
+
+    // ４.人参 などの材料の必要量を合計する
+    // ５.リストにしてデータを返してあげる
+    // 多分、[{category:"青果", items:[{"🍎": "1個", ...}]}, {category:…以下略}] みたいな形な気がする
+    res.status(200);
+    res.send(joinData);
   });
 
   app.get("/error", (req, res) => {
