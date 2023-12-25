@@ -3,9 +3,11 @@ import { View, Text, Button, Image, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
+import axios from "axios";
 
-const MainRecipesList = ({ navigation }) => {
+const MainRecipesList = ({ navigation, route }) => {
   const [Recipes, setRecipes] = useState();
+  // console.log("mainrecipes", route.params);
 
   const anotherRecipes = async () => {
     const res = await recipesApi.changeMainRecipes();
@@ -15,8 +17,22 @@ const MainRecipesList = ({ navigation }) => {
     }
   };
 
-  const changeRecipes = () => {
-    console.log("mainRecipeをpost");
+  const url = "http://localhost:3000/api/v1/recipes";
+
+  const changeRecipes = (afterId) => {
+    // console.log("mainRecipeをpost", route.params[0], route.params[1], afterId);
+    const postChangeMainRecipes = async () => {
+      const res = await axios.post(
+        `${url}/${route.params[0]}/${route.params[1]}/${afterId}`,
+        { date: route.params[0], beforeId: route.params[1], afterId: afterId }
+      );
+      // console.log("data", res.data);
+      if (res.data) {
+        console.log("post後-------", res.data);
+        navigation.navigate("Home");
+      }
+    };
+    postChangeMainRecipes();
   };
 
   useEffect(() => {
@@ -29,14 +45,8 @@ const MainRecipesList = ({ navigation }) => {
         <ScrollView>
           {Recipes &&
             Recipes.map((dateRecipe) => {
-              // console.log("daterecipe2", recipesData);
               return (
                 <View key={dateRecipe.foodId} style={styles.recipes__days}>
-                  {/* <GestureHandlerRootView>
-                    <ScrollView
-                      horizontal={true}
-                      contentContainerStyle={{ flexDirection: "row" }}
-                    > */}
                   <View
                     style={styles.recipeContainer}
                     // key={foodDetail.foodId}
@@ -48,10 +58,12 @@ const MainRecipesList = ({ navigation }) => {
                     <Text numberOfLines={1} ellipsizeMode="tail">
                       {dateRecipe.name}
                     </Text>
-                    <Button title="選択" color="red" onPress={changeRecipes} />
+                    <Button
+                      title="選択"
+                      color="red"
+                      onPress={() => changeRecipes(dateRecipe.foodId)}
+                    />
                   </View>
-                  {/* </ScrollView>
-                  </GestureHandlerRootView> */}
                 </View>
               );
             })}
@@ -64,10 +76,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#F7F6EC",
   },
-  header__top: {
-    marginBottom: 10,
-    fontSize: 20,
-  },
+
   recipes__days: {
     borderWidth: 1,
     width: 150,
@@ -77,9 +86,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     // borderWidth: 1,
   },
-  header__days: {
-    fontSize: 20,
-  },
+
   recipeImg: {
     width: 100,
     height: 100,

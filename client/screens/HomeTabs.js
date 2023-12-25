@@ -13,25 +13,9 @@ const Tab = createBottomTabNavigator();
 
 const HomeTabs = () => {
   return (
-    //移動先にデータ渡せる
-    //     onPress={() => navigation.navigate("User", { userId: 1 })}
-
     <Tab.Navigator>
       <Tab.Screen name="カレンダー" component={CalendarScreen} />
-      <Tab.Screen
-        name="献立"
-        component={RecipesScreen}
-        // options={{
-        //   title: '献立編集',
-        //   tabBarIcon: () => {
-        //     <MaterialCommunityIcons
-        //       name="calendar-edit"
-        //       size={24}
-        //       color="black"
-        //     />;
-        //   },
-        // }}
-      />
+      <Tab.Screen name="献立" component={RecipesScreen} />
       <Tab.Screen name="買い物" component={ShoppingListScreen} />
       <Tab.Screen name="料理" component={CookProcessScreen} />
     </Tab.Navigator>

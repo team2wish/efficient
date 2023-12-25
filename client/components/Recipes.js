@@ -19,9 +19,9 @@ const Recipes = ({ navigation }) => {
     getAllRecipes();
   }, []);
 
-  const changeMainRecipes = (e) => {
-    // console.log("e-------", e.target);
-    navigation.navigate("MainRecipesList");
+  const changeMainRecipes = (beforeId, date) => {
+    // console.log("e-------", beforeId, date);
+    navigation.navigate("MainRecipesList", [date, beforeId]);
   };
   const changeSideRecipes = (e) => {
     // console.log("e-------", e.target);
@@ -39,7 +39,7 @@ const Recipes = ({ navigation }) => {
               return (
                 <View key={dateRecipe.id} style={styles.recipes__days}>
                   <Text style={styles.header__days}>
-                    　{dateRecipe.date.slice(5)} 　　30分以内
+                    {dateRecipe.date.slice(5)} 30分以内
                   </Text>
                   <GestureHandlerRootView>
                     <ScrollView
@@ -52,7 +52,7 @@ const Recipes = ({ navigation }) => {
                         return (
                           <View
                             style={styles.recipeContainer}
-                            key={foodDetail.foodId}
+                            key={foodDetail.id}
                           >
                             <Image
                               style={styles.recipeImg}
@@ -65,7 +65,12 @@ const Recipes = ({ navigation }) => {
                               <Button
                                 title="変更"
                                 color="red"
-                                onPress={changeMainRecipes}
+                                onPress={() =>
+                                  changeMainRecipes(
+                                    foodDetail.id,
+                                    dateRecipe.date
+                                  )
+                                }
                               />
                             ) : (
                               <Button
@@ -74,12 +79,6 @@ const Recipes = ({ navigation }) => {
                                 onPress={changeSideRecipes}
                               />
                             )}
-                            {/* <Button
-                              title="12/10 副菜変更"
-                              onPress={() =>
-                                navigation.navigate("SideRecipesList")
-                              }
-                            /> */}
                           </View>
                         );
                       })}
@@ -104,6 +103,7 @@ const styles = StyleSheet.create({
   },
   recipes__days: {
     borderWidth: 1,
+    borderColor: "#cbd5e0",
   },
   recipeContainer: {
     width: 120,
