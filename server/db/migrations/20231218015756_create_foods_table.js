@@ -23,6 +23,7 @@ exports.up = function (knex) {
     table.boolean("milk").defaultTo(false);
     table.boolean("peanut").defaultTo(false);
     table.integer("pictPathId").unsigned().references("id").inTable("images");
+    table.integer("totalTime").notNullable();
   });
 };
 
