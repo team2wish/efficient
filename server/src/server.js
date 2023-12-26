@@ -175,7 +175,6 @@ const setupServer = () => {
         END, "date" asc, "foodId" asc`
       );
 
-    console.log("kondate:", kondate);
     // １.kondate.lengthが０かどうか？
     if (kondate.length === 0) {
       console.log("しゃーねーな。");
@@ -224,7 +223,6 @@ const setupServer = () => {
           time: elem.totalTime,
         };
       });
-      // console.log("resFoodValueArr: =====", resFoodValueArr);
       returnObj.food = resFoodValueArr;
 
       result.push(returnObj);
