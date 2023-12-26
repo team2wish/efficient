@@ -12,6 +12,43 @@ const setupServer = () => {
   // publicフォルダにアクセスできるように設定
   app.use(express.static("public"));
 
+  const calcStartWeekDate = (strDate) => {
+    let today;
+    if (strDate === undefined) {
+      today = new Date();
+    } else {
+      today = new Date(strDate);
+    }
+    // １.今日の日付を取得
+    // const today = new Date(strDate);
+    // ２.今日の曜日を確認
+    // (日曜日は0, 月曜日:1, 火曜日:2...)
+    const dayOfWeek = today.getDay();
+    // console.log("dayOfWeek: ", dayOfWeek);
+    // ３.土日だったら次の月曜日までの日を計算、平日だったらその週の月曜日までの日付を算出する
+    // 日曜日だったら１日プラスする
+    // 土曜日だったら２日プラスする
+    // 月曜日だったらそのまま
+    // 火曜日だったら１日マイナス
+    // 水曜日だったら…以下略
+    let difference;
+    if (dayOfWeek === 0) {
+      difference = 1;
+    } else if (dayOfWeek === 6) {
+      difference = 2;
+    } else {
+      difference = -(dayOfWeek - 1);
+    }
+
+    // ４.今日の日付から３で計算した日数分戻す
+    const resultDay = new Date(today);
+    resultDay.setDate(today.getDate() + difference);
+
+    // console.log("today", today);
+    // console.log("resultDay: ", resultDay.toLocaleDateString().split("T")[0]);
+    return resultDay.toLocaleDateString().split("T")[0];
+  };
+
   app.get("/", (req, res) => {
     res.status(200);
     res.send("connect");
@@ -132,12 +169,20 @@ const setupServer = () => {
   // 5日分の献立を返す
   app.get("/api/v1/recipes/all", async (req, res) => {
     // [FIXME] DBにデータがない場合ランダムで選択する処理が足りていない
+    const startWeek = calcStartWeekDate();
     const userId = 1; //[FIXME]: userIdは現状決め打ち
     const kondate = await knex("menus")
-      .join("images", "menus.id", "=", "images.id")
       .join("foods", "menus.foodId", "=", "foods.id")
-      .select()
-      .where("userId", `${userId}`);
+      .join("images", "foods.pictPathId", "=", "images.id")
+      .select("menus.*", "images.*", "foods.*")
+      .where("userId", `${userId}`)
+      .where("menus.startWeek", startWeek);
+
+    // １.kondate.lengthが０かどうか？
+    if (kondate.length === 0) {
+      console.log("しゃーねーな。");
+    }
+    // ２.０だったら何もね～でございますので、レシピ作りまー
 
     // 日付のarrを作る
     const dateList = [];
@@ -180,7 +225,7 @@ const setupServer = () => {
           timingFlag: elem.timingFlag,
         };
       });
-      console.log("resFoodValueArr: =====", resFoodValueArr);
+      // console.log("resFoodValueArr: =====", resFoodValueArr);
       returnObj.food = resFoodValueArr;
 
       result.push(returnObj);
@@ -193,7 +238,7 @@ const setupServer = () => {
   app.get("/api/v1/shopping", async (req, res) => {
     // ０.frontからどの週のデータがみたいのか確認する。無いなら強制的に今週にしちゃう。
     // FIXME: 決め打ちで2023/12/18の週だけ表示にしておくが週ごとの表示が欲しくなるはず
-    const startWeek = "2023/12/18";
+    const startWeek = calcStartWeekDate();
     const groupArr = [
       "menus.id",
       "ingredient_list.genreId",
@@ -201,36 +246,6 @@ const setupServer = () => {
       "quantity",
       "unit",
     ];
-
-    // １.いっぱいテーブルつなげる
-    const joinData = await knex("menus")
-      .join("foods", "menus.foodId", "=", "foods.id")
-      .join("ingredients", "ingredients.foodId", "=", "foods.id")
-      .join(
-        "ingredient_list",
-        "ingredients.ingredientId",
-        "=",
-        "ingredient_list.id"
-      )
-      .join("store_area", "ingredient_list.genreId", "=", "store_area.id")
-      // ２.その週のデータで絞る
-      .where("menus.startWeek", startWeek)
-      // ３.ストアの商品カテゴリーごとにまとめる
-      .groupBy(groupArr)
-      .select(groupArr);
-    // .groupBy([
-    //   "menus.id",
-    //   "foods.id",
-    //   "ingredients.id",
-    //   "ingredient_list.id",
-    //   "store_area.id",
-    //   "ingredient_list.genreId",
-    // ]);
-
-    console.log("joinData: ", joinData);
-
-    // 仮の値を設定。実際のアプリケーションでは動的に値を設定してください。
-    const specificStartWeek = "2023-12-18"; // 特定の週の日付
 
     const shoppingList = await knex("menus")
       .join("foods", "menus.foodId", "foods.id")
@@ -243,7 +258,7 @@ const setupServer = () => {
         knex.raw("SUM(ingredients.quantity) as total_quantity"),
         "ingredients.unit"
       )
-      .where("menus.startWeek", specificStartWeek) // 特定の週を基準にフィルタリング
+      .where("menus.startWeek", startWeek) // 特定の週を基準にフィルタリング
       .groupBy(
         "store_area.id",
         "store_section",
@@ -251,16 +266,37 @@ const setupServer = () => {
         "ingredients.unit"
       ) // グループ化
       .orderBy("store_area.id", "ingredient_name"); // 並び替え
-    // .orderBy("store_section", "ingredient_name"); // 並び替え
+
+    // データ変換
+    const transformedData = shoppingList.reduce((acc, item) => {
+      // 既にこのstore_sectionが処理されているかを確認
+      let section = acc.find((sec) => sec.store_section === item.store_section);
+
+      // まだこのsectionがなければ新しく作る
+      if (!section) {
+        section = {
+          store_section: item.store_section,
+          items: [],
+        };
+        acc.push(section);
+      }
+
+      // 現在の材料をsectionのitemsに追加
+      section.items.push({
+        ingredient_name: item.ingredient_name,
+        total_quantity: item.total_quantity,
+        unit: item.unit,
+      });
+
+      return acc;
+    }, []);
 
     // 結果を表示または操作
     // console.log("shoppingList: ", shoppingList);
+    // console.log("transformedData: ", transformedData);
 
-    // ４.人参 などの材料の必要量を合計する
-    // ５.リストにしてデータを返してあげる
-    // 多分、[{category:"青果", items:[{"🍎": "1個", ...}]}, {category:…以下略}] みたいな形な気がする
     res.status(200);
-    res.send(joinData);
+    res.send(transformedData);
   });
 
   app.get("/error", (req, res) => {
