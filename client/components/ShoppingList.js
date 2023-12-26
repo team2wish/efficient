@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
   },
   header__days: {
     fontSize: 20,
+    backgroundColor: "green",
   },
   recipeImg: {
     width: 150,
