@@ -1,61 +1,102 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button, Image, StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import recipesApi from '../api/recipesApi';
+import React, { useEffect, useState } from "react";
+import { View, Text, Button, Image, StyleSheet } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import recipesApi from "../api/recipesApi";
 
 const Recipes = ({ navigation }) => {
-  const [fiveRecipes, setFiveRexipes] = useState();
+  const [fiveRecipes, setFiveRecipes] = useState();
 
   const getAllRecipes = async () => {
     const res = await recipesApi.getAll();
     // console.log("data", res.data);
     if (res.data) {
-      setFiveRexipes(res.data);
+      setFiveRecipes(res.data);
     }
   };
 
   useEffect(() => {
     getAllRecipes();
-  }, []);
+  }, [fiveRecipes]);
+
+  const changeRecipes = (beforeId, date, category) => {
+    // console.log("e-------side", beforeId, date, category);
+    if (category === "isMain") {
+      navigation.navigate("MainRecipesList", [
+        date,
+        beforeId,
+        fiveRecipes,
+        setFiveRecipes,
+      ]);
+    } else if (category === "isSide") {
+      navigation.navigate("SideRecipesList", [
+        date,
+        beforeId,
+        fiveRecipes,
+        setFiveRecipes,
+      ]);
+    } else if (category === "isSoup") {
+      // console.log("soupだよ");
+      navigation.navigate("SoupRecipesList", [
+        date,
+        beforeId,
+        fiveRecipes,
+        setFiveRecipes,
+      ]);
+    } else {
+      // console.log("riceだよ");
+      navigation.navigate("RiceRecipesList", [
+        date,
+        beforeId,
+        fiveRecipes,
+        setFiveRecipes,
+      ]);
+    }
+  };
 
   return (
-    <View>
-      <Text>12/18(月) ~ 12/22(金)</Text>
+    <View style={styles.container}>
+      <Text style={styles.header__top}>12/18(月) ~ 12/22(金)</Text>
       <GestureHandlerRootView>
         <ScrollView>
           {fiveRecipes &&
             fiveRecipes.map((dateRecipe) => {
               // console.log("daterecipe2", recipesData);
               return (
-                <View key={dateRecipe.id}>
-                  <Text>{dateRecipe.date}</Text>
+                <View key={dateRecipe.id} style={styles.recipes__days}>
+                  <Text style={styles.header__days}>
+                    {dateRecipe.date.slice(5)} 30分以内
+                  </Text>
                   <GestureHandlerRootView>
                     <ScrollView
                       horizontal={true}
-                      contentContainerStyle={{ flexDirection: 'row' }}
+                      contentContainerStyle={{ flexDirection: "row" }}
                     >
-                      {dateRecipe.food.map((foodDetail) => {
-                        const imgPath = foodDetail.imagePath.slice(0, -4);
+                      {dateRecipe.food.map((foodDetail, index) => {
+                        // const imgPath = foodDetail.imagePath.slice(0, -4);
+                        const imgPath = foodDetail.imagePath;
                         return (
                           <View
-                            key={foodDetail.foodId}
-                            style={{ marginRight: 8 }}
+                            style={styles.recipeContainer}
+                            // key={foodDetail.id}
+                            key={index}
                           >
                             <Image
                               style={styles.recipeImg}
                               source={{ uri: imgPath }}
                             />
+                            <Text numberOfLines={1} ellipsizeMode="tail">
+                              {foodDetail.name}
+                            </Text>
                             <Button
-                              title="12/10 主菜変更"
+                              title="変更"
+                              color="red"
                               onPress={() =>
-                                navigation.navigate('MainRecipesList')
-                              }
-                            />
-                            <Button
-                              title="12/10 副菜変更"
-                              onPress={() =>
-                                navigation.navigate('SideRecipesList')
+                                changeRecipes(
+                                  foodDetail.id,
+                                  dateRecipe.date,
+                                  foodDetail.category
+                                )
                               }
                             />
                           </View>
@@ -74,11 +115,29 @@ const Recipes = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
+    backgroundColor: "#F7F6EC",
+  },
+  header__top: {
+    marginBottom: 10,
+    fontSize: 20,
+  },
+  recipes__days: {
+    borderWidth: 1,
+    borderColor: "#cbd5e0",
+  },
+  recipeContainer: {
+    width: 150,
+    marginRight: 8,
+    // borderWidth: 1,
+  },
+  header__days: {
+    fontSize: 20,
   },
   recipeImg: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    marginLeft: 10,
   },
 });
 

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, Button, TextInput } from "react-native";
+// import Checkbox from "expo-checkbox";
 
 const SignupModal = ({ navigation }) => {
   const [adultcount, setAdultcount] = useState(0);
   const [childrencount, setChildrencount] = useState(0);
+  // const [isChecked, setChecked] = useState(false);
 
   const adultcountSub = () => {
     if (adultcount > 0) {
@@ -36,6 +38,11 @@ const SignupModal = ({ navigation }) => {
       <Button title="ー" onPress={childrencountSub} />
       <Button title="＋" onPress={childrencountAdd} />
       <Text>アレルギー</Text>
+      {/* <Checkbox
+        style={styles.checkbox}
+        value={isChecked}
+        onValueChange={setChecked}
+      /> */}
       <Text>チェックボックス実装予定</Text>
       <Button
         styles={styles.button}
