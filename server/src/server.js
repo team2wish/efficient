@@ -164,8 +164,18 @@ const setupServer = () => {
       .join("images", "foods.pictPathId", "=", "images.id")
       .select("menus.*", "images.*", "foods.*")
       .where("userId", `${userId}`)
-      .where("menus.startWeek", startWeek);
+      .where("menus.startWeek", startWeek)
+      .orderByRaw(
+        `CASE
+          WHEN "isMain" = true THEN 1
+          WHEN "isSide" = true THEN 2
+          WHEN "isSoup" = true THEN 3
+          WHEN "isRice" = true THEN 4
+          ELSE 5
+        END, "date" asc, "foodId" asc`
+      );
 
+    console.log("kondate:", kondate);
     // １.kondate.lengthが０かどうか？
     if (kondate.length === 0) {
       console.log("しゃーねーな。");
