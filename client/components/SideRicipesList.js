@@ -20,9 +20,9 @@ const SideRecipesList = ({ navigation, route }) => {
   const url = "http://localhost:3000/api/v1/recipes";
 
   const changeRecipes = (afterId) => {
-    // console.log("mainRecipeをpost", route.params[0], route.params[1], afterId);
+    // console.log(`${url}/${route.params[0]}/${route.params[1]}/${afterId}`);
     const postChangeSideRecipes = async () => {
-      const res = await axios.post(
+      const res = await axios.put(
         `${url}/${route.params[0]}/${route.params[1]}/${afterId}`,
         { date: route.params[0], beforeId: route.params[1], afterId: afterId }
       );
@@ -32,7 +32,7 @@ const SideRecipesList = ({ navigation, route }) => {
         navigation.navigate("Home");
       }
     };
-    // postChangeSideRecipes();
+    postChangeSideRecipes();
   };
 
   useEffect(() => {

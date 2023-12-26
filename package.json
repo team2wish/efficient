@@ -13,6 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "expo": "^49.0.21",
+    "react-native-bouncy-checkbox": "^3.0.7",
+    "expo-checkbox": "~2.4.0"
   }
 }

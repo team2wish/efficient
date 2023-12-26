@@ -5,12 +5,12 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
 import axios from "axios";
 
-const MainRecipesList = ({ navigation, route }) => {
+const RiceRecipesList = ({ navigation, route }) => {
   const [Recipes, setRecipes] = useState();
   // console.log("mainrecipes", route.params);
 
   const anotherRecipes = async () => {
-    const res = await recipesApi.changeMainRecipes();
+    const res = await recipesApi.changeRiceRecipes();
     // console.log("data", res.data);
     if (res.data) {
       setRecipes(res.data);
@@ -21,8 +21,7 @@ const MainRecipesList = ({ navigation, route }) => {
 
   const changeRecipes = (afterId) => {
     // console.log(`${url}/${route.params[0]}/${route.params[1]}/${afterId}`);
-    // console.log("mainRecipeをpost", route.params[0], route.params[1], afterId);
-    const postChangeMainRecipes = async () => {
+    const postChangeSideRecipes = async () => {
       const res = await axios.put(
         `${url}/${route.params[0]}/${route.params[1]}/${afterId}`,
         { date: route.params[0], beforeId: route.params[1], afterId: afterId }
@@ -33,7 +32,7 @@ const MainRecipesList = ({ navigation, route }) => {
         navigation.navigate("Home");
       }
     };
-    postChangeMainRecipes();
+    postChangeSideRecipes();
   };
 
   useEffect(() => {
@@ -96,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainRecipesList;
+export default RiceRecipesList;

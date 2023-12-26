@@ -58,6 +58,7 @@ erDiagram
         boolean milk "乳アレルギー"
         boolean peanut "落花生アレルギー"
         string pictPathId FK "完成品メニュー画像パス"
+        int totalTime "単品料理の調理時間"
     }
 
     ingredients {
