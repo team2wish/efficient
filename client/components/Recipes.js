@@ -20,7 +20,7 @@ const Recipes = ({ navigation }) => {
   }, [fiveRecipes]);
 
   const changeRecipes = (beforeId, date, category) => {
-    console.log("e-------side", beforeId, date, category);
+    // console.log("e-------side", beforeId, date, category);
     if (category === "isMain") {
       navigation.navigate("MainRecipesList", [
         date,
@@ -36,7 +36,7 @@ const Recipes = ({ navigation }) => {
         setFiveRecipes,
       ]);
     } else if (category === "isSoup") {
-      console.log("soupだよ");
+      // console.log("soupだよ");
       navigation.navigate("SoupRecipesList", [
         date,
         beforeId,
@@ -44,7 +44,7 @@ const Recipes = ({ navigation }) => {
         setFiveRecipes,
       ]);
     } else {
-      console.log("riceだよ");
+      // console.log("riceだよ");
       navigation.navigate("RiceRecipesList", [
         date,
         beforeId,
