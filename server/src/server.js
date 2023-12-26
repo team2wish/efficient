@@ -19,18 +19,8 @@ const setupServer = () => {
     } else {
       today = new Date(strDate);
     }
-    // １.今日の日付を取得
-    // const today = new Date(strDate);
-    // ２.今日の曜日を確認
-    // (日曜日は0, 月曜日:1, 火曜日:2...)
+
     const dayOfWeek = today.getDay();
-    // console.log("dayOfWeek: ", dayOfWeek);
-    // ３.土日だったら次の月曜日までの日を計算、平日だったらその週の月曜日までの日付を算出する
-    // 日曜日だったら１日プラスする
-    // 土曜日だったら２日プラスする
-    // 月曜日だったらそのまま
-    // 火曜日だったら１日マイナス
-    // 水曜日だったら…以下略
     let difference;
     if (dayOfWeek === 0) {
       difference = 1;
@@ -43,9 +33,6 @@ const setupServer = () => {
     // ４.今日の日付から３で計算した日数分戻す
     const resultDay = new Date(today);
     resultDay.setDate(today.getDate() + difference);
-
-    // console.log("today", today);
-    // console.log("resultDay: ", resultDay.toLocaleDateString().split("T")[0]);
     return resultDay.toLocaleDateString().split("T")[0];
   };
 
@@ -156,10 +143,9 @@ const setupServer = () => {
 
   // 5日分の献立を返す
   app.get("/api/v1/recipes/all", async (req, res) => {
-    // [FIXME] DBにデータがない場合ランダムで選択する処理が足りていない
     const startWeek = calcStartWeekDate();
     const userId = 1; //[FIXME]: userIdは現状決め打ち
-    const kondate = await knex("menus")
+    let kondate = await knex("menus")
       .join("foods", "menus.foodId", "=", "foods.id")
       .join("images", "foods.pictPathId", "=", "images.id")
       .select("menus.*", "images.*", "foods.*")
@@ -175,11 +161,65 @@ const setupServer = () => {
         END, "date" asc, "foodId" asc`
       );
 
-    // １.kondate.lengthが０かどうか？
     if (kondate.length === 0) {
-      console.log("しゃーねーな。");
+      const menusDB = await knex("menus");
+      let countId = menusDB.length;
+      const soupAndRiceArr = [1, 12, 13];
+      const mainArr = await knex("foods")
+        .where("isMain", true)
+        .orderByRaw("RANDOM()");
+      const sideArr = await knex("foods")
+        .where("isSide", true)
+        .orderByRaw("RANDOM()");
+      const soupArr = await knex("foods")
+        .where("isSoup", true)
+        .orderByRaw("RANDOM()");
+
+      const menu = {};
+      for (let i = 0; i < mainArr.length; i++) {
+        const cookingDay = new Date(startWeek);
+        cookingDay.setDate(cookingDay.getDate() + i);
+        const setDate = cookingDay.toLocaleDateString().split("T")[0];
+
+        const RandIndex = Math.floor(Math.random() * soupAndRiceArr.length);
+        menu[setDate] = [
+          mainArr[i].id,
+          sideArr[i].id,
+          soupAndRiceArr[RandIndex],
+        ];
+      }
+      for (date in menu) {
+        for (foodId of menu[date]) {
+          countId++;
+          await knex("menus").insert([
+            {
+              id: countId,
+              userId: userId,
+              foodId: foodId,
+              startWeek: startWeek,
+              date: date,
+              timingFlag: 2,
+            },
+          ]);
+        }
+      }
+
+      kondate = await knex("menus")
+        .join("foods", "menus.foodId", "=", "foods.id")
+        .join("images", "foods.pictPathId", "=", "images.id")
+        .select("menus.*", "images.*", "foods.*")
+        .where("userId", `${userId}`)
+        .where("menus.startWeek", startWeek)
+        .orderByRaw(
+          `CASE
+          WHEN "isMain" = true THEN 1
+          WHEN "isSide" = true THEN 2
+          WHEN "isSoup" = true THEN 3
+          WHEN "isRice" = true THEN 4
+          ELSE 5
+        END, "date" asc, "foodId" asc`
+        );
     }
-    // ２.０だったら何もね～でございますので、レシピ作りまー
 
     // 日付のarrを作る
     const dateList = [];
@@ -233,8 +273,6 @@ const setupServer = () => {
   });
 
   app.get("/api/v1/shopping", async (req, res) => {
-    // ０.frontからどの週のデータがみたいのか確認する。無いなら強制的に今週にしちゃう。
-    // FIXME: 決め打ちで2023/12/18の週だけ表示にしておくが週ごとの表示が欲しくなるはず
     const startWeek = calcStartWeekDate();
     const groupArr = [
       "menus.id",
