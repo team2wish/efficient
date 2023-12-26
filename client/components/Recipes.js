@@ -17,15 +17,41 @@ const Recipes = ({ navigation }) => {
 
   useEffect(() => {
     getAllRecipes();
-  }, []);
+  }, [fiveRecipes]);
 
-  const changeMainRecipes = (beforeId, date) => {
-    // console.log("e-------", beforeId, date);
-    navigation.navigate("MainRecipesList", [date, beforeId]);
-  };
-  const changeSideRecipes = (beforeId, date) => {
-    // console.log("e-------side", beforeId, date);
-    navigation.navigate("SideRecipesList");
+  const changeRecipes = (beforeId, date, category) => {
+    console.log("e-------side", beforeId, date, category);
+    if (category === "isMain") {
+      navigation.navigate("MainRecipesList", [
+        date,
+        beforeId,
+        fiveRecipes,
+        setFiveRecipes,
+      ]);
+    } else if (category === "isSide") {
+      navigation.navigate("SideRecipesList", [
+        date,
+        beforeId,
+        fiveRecipes,
+        setFiveRecipes,
+      ]);
+    } else if (category === "isSoup") {
+      console.log("soupだよ");
+      navigation.navigate("SoupRecipesList", [
+        date,
+        beforeId,
+        fiveRecipes,
+        setFiveRecipes,
+      ]);
+    } else {
+      console.log("riceだよ");
+      navigation.navigate("RiceRecipesList", [
+        date,
+        beforeId,
+        fiveRecipes,
+        setFiveRecipes,
+      ]);
+    }
   };
 
   return (
@@ -46,13 +72,14 @@ const Recipes = ({ navigation }) => {
                       horizontal={true}
                       contentContainerStyle={{ flexDirection: "row" }}
                     >
-                      {dateRecipe.food.map((foodDetail) => {
+                      {dateRecipe.food.map((foodDetail, index) => {
                         // const imgPath = foodDetail.imagePath.slice(0, -4);
                         const imgPath = foodDetail.imagePath;
                         return (
                           <View
                             style={styles.recipeContainer}
-                            key={foodDetail.id}
+                            // key={foodDetail.id}
+                            key={index}
                           >
                             <Image
                               style={styles.recipeImg}
@@ -61,29 +88,17 @@ const Recipes = ({ navigation }) => {
                             <Text numberOfLines={1} ellipsizeMode="tail">
                               {foodDetail.name}
                             </Text>
-                            {foodDetail.category === "isMain" ? (
-                              <Button
-                                title="変更"
-                                color="red"
-                                onPress={() =>
-                                  changeMainRecipes(
-                                    foodDetail.id,
-                                    dateRecipe.date
-                                  )
-                                }
-                              />
-                            ) : (
-                              <Button
-                                title="変更"
-                                color="red"
-                                onPress={() =>
-                                  changeSideRecipes(
-                                    foodDetail.id,
-                                    dateRecipe.date
-                                  )
-                                }
-                              />
-                            )}
+                            <Button
+                              title="変更"
+                              color="red"
+                              onPress={() =>
+                                changeRecipes(
+                                  foodDetail.id,
+                                  dateRecipe.date,
+                                  foodDetail.category
+                                )
+                              }
+                            />
                           </View>
                         );
                       })}
@@ -111,7 +126,7 @@ const styles = StyleSheet.create({
     borderColor: "#cbd5e0",
   },
   recipeContainer: {
-    width: 120,
+    width: 150,
     marginRight: 8,
     // borderWidth: 1,
   },
@@ -119,8 +134,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   recipeImg: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     borderRadius: 10,
     marginLeft: 10,
   },

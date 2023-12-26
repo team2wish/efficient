@@ -10,6 +10,8 @@ import SignupScreen from "./screens/SignupScreen";
 import MainRecipesListScreen from "./screens/MainRecipesListScreen";
 import SideRecipesListScreen from "./screens/SideRecipesListScreen";
 import SignupModalScreen from "./screens/SignupModalScreen";
+import RiceRecipesListScreen from "./screens/RiceRecipesListScreen";
+import SoupRecipesListScreen from "./screens/SoupRecipesListScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +41,14 @@ export default function App() {
         <Stack.Screen
           name="SideRecipesList"
           component={SideRecipesListScreen}
+        />
+        <Stack.Screen
+          name="SoupRecipesList"
+          component={SoupRecipesListScreen}
+        />
+        <Stack.Screen
+          name="RiceRecipesList"
+          component={RiceRecipesListScreen}
         />
         <Stack.Screen name="User" component={UserScreen} />
         <Stack.Screen name="Setting" component={SettingScreen} />
