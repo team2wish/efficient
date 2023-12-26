@@ -164,7 +164,16 @@ const setupServer = () => {
       .join("images", "foods.pictPathId", "=", "images.id")
       .select("menus.*", "images.*", "foods.*")
       .where("userId", `${userId}`)
-      .where("menus.startWeek", startWeek);
+      .where("menus.startWeek", startWeek)
+      .orderByRaw(
+        `CASE
+          WHEN "isMain" = true THEN 1
+          WHEN "isSide" = true THEN 2
+          WHEN "isSoup" = true THEN 3
+          WHEN "isRice" = true THEN 4
+          ELSE 5
+        END, "date" asc, "foodId" asc`
+      );
 
     // １.kondate.lengthが０かどうか？
     if (kondate.length === 0) {
@@ -214,7 +223,6 @@ const setupServer = () => {
           time: elem.totalTime,
         };
       });
-      // console.log("resFoodValueArr: =====", resFoodValueArr);
       returnObj.food = resFoodValueArr;
 
       result.push(returnObj);
