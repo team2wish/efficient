@@ -17,7 +17,7 @@ const ShoppingListScreen = () => {
 
   useEffect(() => {
     getShoppingList();
-  }, [shoppingList]);
+  }, []);
 
   return (
     // <View>
@@ -45,7 +45,11 @@ const ShoppingListScreen = () => {
                         // key={foodDetail.id}
                         key={index}
                       >
-                        <Text>{foodDetail.ingredient_name}</Text>
+                        <Text>
+                          {foodDetail.ingredient_name}
+                          {foodDetail.total_quantity}
+                          {foodDetail.unit}
+                        </Text>
                       </View>
                     );
                   })}

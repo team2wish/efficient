@@ -56,6 +56,7 @@ const MainRecipesList = ({ navigation, route }) => {
                       style={styles.recipeImg}
                       source={{ uri: dateRecipe.imagePath }}
                     />
+                    <Text>{dateRecipe.time}分</Text>
                     <Text numberOfLines={1} ellipsizeMode="tail">
                       {dateRecipe.name}
                     </Text>
