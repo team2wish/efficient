@@ -22,6 +22,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 31,
+      totalTime: 35,
     },
     {
       id: 2,
@@ -39,6 +40,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 23,
+      totalTime: 28,
     },
     {
       id: 3,
@@ -56,6 +58,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 16,
+      totalTime: 11,
     },
     {
       id: 4,
@@ -73,6 +76,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 33,
+      totalTime: 15,
     },
     {
       id: 5,
@@ -90,6 +94,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 34,
+      totalTime: 25,
     },
     {
       id: 6,
@@ -107,6 +112,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 35,
+      totalTime: 30,
     },
     {
       id: 7,
@@ -124,6 +130,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 13,
+      totalTime: 6,
     },
     {
       id: 8,
@@ -141,6 +148,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 9,
+      totalTime: 8,
     },
     {
       id: 9,
@@ -158,6 +166,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 36,
+      totalTime: 5,
     },
     {
       id: 10,
@@ -175,6 +184,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 37,
+      totalTime: 10,
     },
     {
       id: 11,
@@ -192,6 +202,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 38,
+      totalTime: 15,
     },
     {
       id: 12,
@@ -209,6 +220,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 2,
+      totalTime: 9,
     },
     {
       id: 13,
@@ -226,6 +238,7 @@ exports.seed = async function (knex) {
       milk: false,
       peanut: false,
       pictPathId: 1,
+      totalTime: 8,
     },
   ]);
 };

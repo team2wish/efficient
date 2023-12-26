@@ -69,15 +69,6 @@ const setupServer = () => {
           foodId: req.params.afterFoodId,
         });
 
-      // 確認用
-      // const afterData = await knex("menus")
-      //   .where(
-      //     "menus.date",
-      //     `${req.params.year}/${req.params.month}/${req.params.date}`
-      //   )
-      //   .where("menus.foodId", `${req.params.afterFoodId}`);
-      // console.log("afterData: ", afterData);
-
       if (isSuccess === 1) {
         res.status(200);
         res.send("メニューの変更が完了しました");
@@ -89,8 +80,6 @@ const setupServer = () => {
   );
 
   app.get("/api/v1/recipes/search/:category", async (req, res) => {
-    // console.log("req.params.category", req.params.category);
-
     const getParams = req.params.category;
     // カテゴリーに一致するfoodsを取得
     const getCategoryList = await knex("foods")
@@ -98,14 +87,13 @@ const setupServer = () => {
       .where(getParams, true)
       .join("images", "images.id", "=", "foods.pictPathId");
 
-    // [FIXME]: timeはテーブル修正後にちゃんと出す。今は１５分のダミー
     const result = getCategoryList.map((elem) => {
       return {
         foodId: elem.id,
         name: elem.name,
         category: getParams,
         imagePath: elem.imagePath.split(".")[0],
-        time: 15,
+        time: elem.totalTime,
       };
     });
 
@@ -176,7 +164,16 @@ const setupServer = () => {
       .join("images", "foods.pictPathId", "=", "images.id")
       .select("menus.*", "images.*", "foods.*")
       .where("userId", `${userId}`)
-      .where("menus.startWeek", startWeek);
+      .where("menus.startWeek", startWeek)
+      .orderByRaw(
+        `CASE
+          WHEN "isMain" = true THEN 1
+          WHEN "isSide" = true THEN 2
+          WHEN "isSoup" = true THEN 3
+          WHEN "isRice" = true THEN 4
+          ELSE 5
+        END, "date" asc, "foodId" asc`
+      );
 
     // １.kondate.lengthが０かどうか？
     if (kondate.length === 0) {
@@ -223,9 +220,9 @@ const setupServer = () => {
           name: elem.name,
           imagePath: elem.imagePath.split(".")[0],
           timingFlag: elem.timingFlag,
+          time: elem.totalTime,
         };
       });
-      // console.log("resFoodValueArr: =====", resFoodValueArr);
       returnObj.food = resFoodValueArr;
 
       result.push(returnObj);
