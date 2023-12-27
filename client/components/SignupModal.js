@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, Button, TextInput } from "react-native";
-// import Checkbox from "expo-checkbox";
+import Checkbox from "expo-checkbox";
 
 const SignupModal = ({ navigation }) => {
   const [adultcount, setAdultcount] = useState(0);
   const [childrencount, setChildrencount] = useState(0);
-  // const [isChecked, setIsChecked] = useState(false);
+  const [shrimpChecked, setShrimpChecked] = useState(false);
+  const [crabChecked, setCrabChecked] = useState(false);
+  const [wheatChecked, setWheatChecked] = useState(false);
+  const [buckwheat_noodlesChecked, setBuckwheat_noodlesChecked] =
+    useState(false);
+  const [eggChecked, setEggChecked] = useState(false);
+  const [milkChecked, setMilkChecked] = useState(false);
+  const [peanutChecked, setPeanutChecked] = useState(false);
 
   const adultcountSub = () => {
     if (adultcount > 0) {
@@ -37,19 +44,78 @@ const SignupModal = ({ navigation }) => {
       <Text>子供 {childrencount}名</Text>
       <Button title="ー" onPress={childrencountSub} />
       <Button title="＋" onPress={childrencountAdd} />
-      <Text>アレルギー</Text>
-      {/* <Checkbox
-        style={styles.checkbox}
-        value={isChecked}
-        onValueChange={setIsChecked}
-      /> */}
-      <Text>チェックボックス実装予定</Text>
+      <View style={styles.checkboxContainer}>
+        <Text>えびアレルギー</Text>
+        <Checkbox
+          style={styles.checkbox}
+          value={shrimpChecked}
+          onValueChange={setShrimpChecked}
+        />
+      </View>
+      <View style={styles.checkboxContainer}>
+        <Text>かにアレルギー</Text>
+        <Checkbox
+          style={styles.checkbox}
+          value={crabChecked}
+          onValueChange={setCrabChecked}
+        />
+      </View>
+      <View style={styles.checkboxContainer}>
+        <Text>小麦アレルギー</Text>
+        <Checkbox
+          style={styles.checkbox}
+          value={wheatChecked}
+          onValueChange={setWheatChecked}
+        />
+      </View>
+      <View style={styles.checkboxContainer}>
+        <Text>蕎麦アレルギー</Text>
+        <Checkbox
+          style={styles.checkbox}
+          value={buckwheat_noodlesChecked}
+          onValueChange={setBuckwheat_noodlesChecked}
+        />
+      </View>
+      <View style={styles.checkboxContainer}>
+        <Text>卵アレルギー</Text>
+        <Checkbox
+          style={styles.checkbox}
+          value={eggChecked}
+          onValueChange={setEggChecked}
+        />
+      </View>
+      <View style={styles.checkboxContainer}>
+        <Text>乳アレルギー</Text>
+        <Checkbox
+          style={styles.checkbox}
+          value={milkChecked}
+          onValueChange={setMilkChecked}
+        />
+      </View>
+      <View style={styles.checkboxContainer}>
+        <Text>落花生アレルギー</Text>
+        <Checkbox
+          style={styles.checkbox}
+          value={peanutChecked}
+          onValueChange={setPeanutChecked}
+        />
+      </View>
       <Button
         styles={styles.button}
         title="新規登録画面へ戻る"
-        onPress={() =>
-          navigation.navigate("Signup", [adultcount, childrencount])
-        }
+        onPress={() => {
+          navigation.navigate("Signup", [
+            adultcount,
+            childrencount,
+            shrimpChecked,
+            crabChecked,
+            wheatChecked,
+            buckwheat_noodlesChecked,
+            eggChecked,
+            milkChecked,
+            peanutChecked,
+          ]);
+        }}
       />
     </View>
   );
@@ -64,6 +130,10 @@ const styles = StyleSheet.create({
   button: {
     // flex: 1,
     backgroundColor: "#fff",
+    alignItems: "center",
+  },
+  checkboxContainer: {
+    flexDirection: "row",
     alignItems: "center",
   },
   checkbox: {

@@ -3,13 +3,15 @@ import { View, Text, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
+import Checkbox from "expo-checkbox";
 
 const ShoppingListScreen = () => {
   const [shoppingList, setShoppingList] = useState();
+  const [isChecked, setIsChecked] = useState({});
 
   const getShoppingList = async () => {
     const res = await recipesApi.getShopping();
-    console.log("data", res.data);
+    // console.log("data", res.data);
     if (res.data) {
       setShoppingList(res.data);
     }
@@ -19,33 +21,57 @@ const ShoppingListScreen = () => {
     getShoppingList();
   }, []);
 
+  const handleValueChange = (id, value) => {
+    setIsChecked({ ...isChecked, [id]: value });
+  };
+
+  const getStyle = (value) => {
+    switch (value) {
+      case "野菜":
+        return styles.style1;
+      case "豆腐":
+        return styles.style2;
+      case "肉":
+        return styles.style3;
+      default:
+        return styles.style4;
+    }
+  };
+
   return (
-    // <View>
-    //   <Text>買い物リスト</Text>
-    //   <Text>12/15〜12/16</Text>
-    // </View>
     <View style={styles.container}>
-      <Text style={styles.header__top}>12/18(月) ~ 12/22(金)</Text>
+      <Text style={styles.header__top}>買い物リスト</Text>
       <GestureHandlerRootView>
         <ScrollView>
           {shoppingList &&
-            shoppingList.map((dateRecipe, index) => {
+            shoppingList.map((dateRecipe, dateIndex) => {
               // console.log("daterecipe2", recipesData);
               return (
-                <View key={index} style={styles.recipes__days}>
-                  <Text style={styles.header__days}>
+                <View key={dateIndex}>
+                  <Text
+                    style={[
+                      styles.store_section,
+                      getStyle(dateRecipe.store_section),
+                    ]}
+                  >
                     {dateRecipe.store_section}
                   </Text>
 
-                  {dateRecipe.items.map((foodDetail, index) => {
+                  {dateRecipe.items.map((foodDetail, itemIndex) => {
                     // const imgPath = foodDetail.imagePath.slice(0, -4);
+                    const id = `${dateIndex}-${itemIndex}`;
                     return (
-                      <View
-                        style={styles.recipeContainer}
-                        // key={foodDetail.id}
-                        key={index}
-                      >
-                        <Text>{foodDetail.ingredient_name}</Text>
+                      <View style={styles.recipeContainer} key={id}>
+                        <View style={styles.checkboxContainer}>
+                          <Checkbox
+                            style={styles.checkbox}
+                            value={isChecked[id] || false}
+                            onValueChange={(value) =>
+                              handleValueChange(id, value)
+                            }
+                          />
+                          <Text>{foodDetail.ingredient_name}</Text>
+                        </View>
                         <Text style={styles.recipeContainer__right}>
                           {foodDetail.total_quantity}
                           {foodDetail.unit}
@@ -68,30 +94,46 @@ const styles = StyleSheet.create({
   },
   header__top: {
     marginBottom: 10,
+    textAlign: "center",
     fontSize: 20,
   },
-  recipes__days: {
+  store_section: {
     borderWidth: 1,
     borderColor: "#cbd5e0",
   },
+  style1: {
+    fontSize: 20,
+    backgroundColor: "green",
+    marginBottom: 10,
+  },
+  style2: {
+    fontSize: 20,
+    backgroundColor: "white",
+    marginBottom: 10,
+  },
+  style3: {
+    fontSize: 20,
+    backgroundColor: "orange",
+    marginBottom: 10,
+  },
+  style4: {
+    fontSize: 20,
+    backgroundColor: "pink",
+    marginBottom: 10,
+  },
   recipeContainer: {
-    width: 300,
+    width: 370,
     marginRight: 8,
     // borderWidth: 1,
+  },
+  checkboxContainer: {
+    width: 300,
+    flexDirection: "row",
+    alignItems: "center",
   },
   recipeContainer__right: {
     color: "red",
     textAlign: "right",
-  },
-  header__days: {
-    fontSize: 20,
-    backgroundColor: "green",
-  },
-  recipeImg: {
-    width: 150,
-    height: 150,
-    borderRadius: 10,
-    marginLeft: 10,
   },
 });
 

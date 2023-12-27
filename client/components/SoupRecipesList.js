@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, Image, StyleSheet } from "react-native";
+import { View, Text, Button, Image, StyleSheet, FlatList } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
@@ -42,33 +42,28 @@ const SoupRecipesList = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <GestureHandlerRootView>
-        <ScrollView>
-          {Recipes &&
-            Recipes.map((dateRecipe) => {
-              return (
-                <View key={dateRecipe.foodId} style={styles.recipes__days}>
-                  <View
-                    style={styles.recipeContainer}
-                    // key={foodDetail.foodId}
-                  >
-                    <Image
-                      style={styles.recipeImg}
-                      source={{ uri: dateRecipe.imagePath }}
-                    />
-                    <Text>{dateRecipe.time}分</Text>
-                    <Text numberOfLines={1} ellipsizeMode="tail">
-                      {dateRecipe.name}
-                    </Text>
-                    <Button
-                      title="選択"
-                      color="red"
-                      onPress={() => changeRecipes(dateRecipe.foodId)}
-                    />
-                  </View>
-                </View>
-              );
-            })}
-        </ScrollView>
+        <FlatList
+          data={Recipes}
+          keyExtractor={(item) => item.foodId.toString()}
+          numColumns={2} // 2列のグリッド表示
+          renderItem={({ item }) => (
+            <View style={styles.recipeContainer}>
+              <Image
+                style={styles.recipeImg}
+                source={{ uri: item.imagePath }}
+              />
+              <Text>{item.time}分</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail">
+                {item.name}
+              </Text>
+              <Button
+                title="選択"
+                color="red"
+                onPress={() => changeRecipes(item.foodId)}
+              />
+            </View>
+          )}
+        />
       </GestureHandlerRootView>
     </View>
   );
@@ -83,16 +78,16 @@ const styles = StyleSheet.create({
     width: 150,
   },
   recipeContainer: {
-    width: 120,
-    marginRight: 8,
+    width: "50%", // 2列のグリッド表示のために幅を50%に設定
+    // marginRight: 8,
     // borderWidth: 1,
   },
 
   recipeImg: {
-    width: 100,
+    width: "90%",
     height: 100,
     borderRadius: 10,
-    marginLeft: 10,
+    // marginLeft: 10,
   },
 });
 

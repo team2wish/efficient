@@ -7,8 +7,7 @@ const Signup = ({ navigation, route }) => {
   const [password, setPassword] = useState("");
 
   //SignupModalから値取得は確認OK
-  // console.log("adultcount:", route.params[0]);
-  // console.log("childrencount:", route.params[1]);
+  console.log("SignupModalの入力情報:", route.params);
 
   const onChangeName = (value) => {
     setName(value);

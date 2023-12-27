@@ -580,5 +580,15 @@ exports.seed = async function (knex) {
     { id: 573, name: "白だし(4倍)", genreId: 7 },
     { id: 574, name: "めんつゆ(ストレート)", genreId: 7 },
     { id: 575, name: "コンソメ(顆粒)", genreId: 7 },
+    { id: 576, name: "ゴマ", genreId: 7 },
+    { id: 577, name: "すりおろしにんにく", genreId: 7 },
+    { id: 578, name: "焼肉のタレ(中辛)", genreId: 7 },
+    { id: 579, name: "れんこん", genreId: 2 },
+    { id: 580, name: "にんじん", genreId: 2 },
+    { id: 581, name: "生しいたけ", genreId: 2 },
+    { id: 582, name: "こんにゃく", genreId: 3 },
+    { id: 583, name: "サラダ油", genreId: 7 },
+    { id: 584, name: "片栗粉", genreId: 7 },
+    { id: 585, name: "青ネギ", genreId: 2 },
   ]);
 };
