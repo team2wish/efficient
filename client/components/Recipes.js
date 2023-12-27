@@ -18,6 +18,7 @@ const Recipes = ({ navigation }) => {
   useEffect(() => {
     getAllRecipes();
   }, [fiveRecipes]);
+  // }, []);
 
   const changeRecipes = (beforeId, date, category) => {
     // console.log("e-------side", beforeId, date, category);
@@ -62,10 +63,15 @@ const Recipes = ({ navigation }) => {
           {fiveRecipes &&
             fiveRecipes.map((dateRecipe) => {
               // console.log("daterecipe2", recipesData);
+              const totalCookTime = dateRecipe.food.reduce(
+                (total, foodDetail) => total + foodDetail.time,
+                0
+              );
               return (
                 <View key={dateRecipe.id} style={styles.recipes__days}>
                   <Text style={styles.header__days}>
-                    {dateRecipe.date.slice(5)} 30分以内
+                    {dateRecipe.date.slice(5)} {Math.floor(totalCookTime * 0.7)}
+                    分以内
                   </Text>
                   <GestureHandlerRootView>
                     <ScrollView
@@ -75,6 +81,7 @@ const Recipes = ({ navigation }) => {
                       {dateRecipe.food.map((foodDetail, index) => {
                         // const imgPath = foodDetail.imagePath.slice(0, -4);
                         const imgPath = foodDetail.imagePath;
+
                         return (
                           <View
                             style={styles.recipeContainer}
@@ -85,6 +92,7 @@ const Recipes = ({ navigation }) => {
                               style={styles.recipeImg}
                               source={{ uri: imgPath }}
                             />
+                            <Text>{foodDetail.time}分</Text>
                             <Text numberOfLines={1} ellipsizeMode="tail">
                               {foodDetail.name}
                             </Text>
