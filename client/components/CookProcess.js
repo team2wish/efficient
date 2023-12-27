@@ -1,54 +1,54 @@
-import React, { useEffect, useState } from "react";
-import Voice from "@react-native-voice/voice";
-import recipesApi from "../api/recipesApi";
-import { View, Text, StyleSheet, Button, Image } from "react-native";
-// import * as Speech from 'expo-speech';
-import "../assets/icon.png";
+import React, { useEffect, useState } from 'react';
+import Voice from '@react-native-voice/voice';
+import recipesApi from '../api/recipesApi';
+import { View, Text, StyleSheet, Button, Image } from 'react-native';
+import * as Speech from 'expo-speech';
+// import Tts from 'react-native-tts';
+import '../assets/icon.png';
 
 const CookProcess = ({ navigation }) => {
   const [count, setCount] = useState(0);
   const [recoding, setRecoding] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [cookProcess, setCookProcess] = useState();
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState('');
 
   const getCookProcess = async () => {
     const res = await recipesApi.getCooking();
     setCookProcess(res.data);
+    Speech.speak(res.data[0].text);
+    // Tts.speak(res.data[0].text, {
+    //   iosVoiceId: 'com.apple.ttsbundle.Kyoko-compact',
+    //   rate: 0.5,
+    //   language: 'ja-JP',
+    // });
   };
 
   const speechStartHandler = (e) => {
-    console.log("speech start");
+    console.log('speech start');
   };
 
   const speechEndHandler = (e) => {
     setRecoding(false);
-    console.log("speech end");
+    console.log('speech end');
   };
 
   const speechResultsHandler = (e) => {
-    console.log("voice enent: ", e);
+    // console.log('voice event: ', e);
     const text = e.value[0];
-    if (text.includes("次")) {
-      console.log("next");
-      setCount(count + 1);
-      // setResult('');
-    } else if (result.includes("前")) {
-      setCount(count - 1);
-      setResult("");
-    }
+    setResult(text);
   };
 
   const speechErrorHandler = (e) => {
-    console.log("speech error", e);
+    console.log('speech error', e);
   };
 
   const startRecoding = async () => {
     setRecoding(true);
     try {
-      await Voice.start("ja-JP");
+      await Voice.start('ja-JP');
     } catch (error) {
-      console.log("error: ", error);
+      console.log('error: ', error);
     }
   };
 
@@ -57,7 +57,7 @@ const CookProcess = ({ navigation }) => {
       await Voice.stop();
       setRecoding(false);
     } catch (error) {
-      console.log("error: ", error);
+      console.log('error: ', error);
     }
   };
 
@@ -75,6 +75,22 @@ const CookProcess = ({ navigation }) => {
   useEffect(() => {
     getCookProcess();
   }, []);
+
+  useEffect(() => {
+    if (result.slice(-1) === '次' && count < cookProcess.length - 1) {
+      setCount(count + 1);
+      Speech.speak(cookProcess[count + 1].text);
+      // Tts.speak(cookProcess[count + 1].text, {
+      //   iosVoiceId: 'com.apple.ttsbundle.Kyoko-compact',
+      //   rate: 0.5,
+      //   language: 'ja-JP',
+      // });
+    }
+    if (result.slice(-1) === '前' && count >= 0) {
+      setCount(count - 1);
+      Speech.speak(cookProcess[count - 1].text);
+    }
+  }, [result]);
 
   return (
     cookProcess && (
@@ -111,12 +127,12 @@ const CookProcess = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
-    alignItems: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
   },
   recipiContainer: {
     marginTop: 10,
-    backgroundColor: "green",
+    backgroundColor: 'green',
     width: 200,
     height: 200,
   },
