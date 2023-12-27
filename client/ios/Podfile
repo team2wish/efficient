@@ -39,6 +39,14 @@ end
 
 target 'test' do
   use_expo_modules!
+  post_integrate do |installer|
+    begin
+      expo_patch_react_imports!(installer)
+    rescue => e
+      Pod::UI.warn e
+    end
+  end
+
   config = use_native_modules!
 
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
@@ -77,11 +85,11 @@ target 'test' do
     end
   end
 
-  post_integrate do |installer|
-    begin
-      expo_patch_react_imports!(installer)
-    rescue => e
-      Pod::UI.warn e
-    end
-  end
+  # post_integrate do |installer|
+  #   begin
+  #     expo_patch_react_imports!(installer)
+  #   rescue => e
+  #     Pod::UI.warn e
+  #   end
+  # end
 end
