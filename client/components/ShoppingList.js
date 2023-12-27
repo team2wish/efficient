@@ -17,7 +17,7 @@ const ShoppingListScreen = () => {
 
   useEffect(() => {
     getShoppingList();
-  }, [shoppingList]);
+  }, []);
 
   return (
     // <View>
@@ -46,6 +46,10 @@ const ShoppingListScreen = () => {
                         key={index}
                       >
                         <Text>{foodDetail.ingredient_name}</Text>
+                        <Text style={styles.recipeContainer__right}>
+                          {foodDetail.total_quantity}
+                          {foodDetail.unit}
+                        </Text>
                       </View>
                     );
                   })}
@@ -71,12 +75,17 @@ const styles = StyleSheet.create({
     borderColor: "#cbd5e0",
   },
   recipeContainer: {
-    width: 150,
+    width: 300,
     marginRight: 8,
     // borderWidth: 1,
   },
+  recipeContainer__right: {
+    color: "red",
+    textAlign: "right",
+  },
   header__days: {
     fontSize: 20,
+    backgroundColor: "green",
   },
   recipeImg: {
     width: 150,
