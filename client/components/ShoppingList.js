@@ -25,17 +25,35 @@ const ShoppingListScreen = () => {
     setIsChecked({ ...isChecked, [id]: value });
   };
 
+  const getStyle = (value) => {
+    switch (value) {
+      case "野菜":
+        return styles.style1;
+      case "豆腐":
+        return styles.style2;
+      case "肉":
+        return styles.style3;
+      default:
+        return styles.style4;
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header__top}>12/18(月) ~ 12/22(金)</Text>
+      <Text style={styles.header__top}>買い物リスト</Text>
       <GestureHandlerRootView>
         <ScrollView>
           {shoppingList &&
             shoppingList.map((dateRecipe, dateIndex) => {
               // console.log("daterecipe2", recipesData);
               return (
-                <View key={dateIndex} style={styles.recipes__days}>
-                  <Text style={styles.header__days}>
+                <View key={dateIndex}>
+                  <Text
+                    style={[
+                      styles.store_section,
+                      getStyle(dateRecipe.store_section),
+                    ]}
+                  >
                     {dateRecipe.store_section}
                   </Text>
 
@@ -76,14 +94,35 @@ const styles = StyleSheet.create({
   },
   header__top: {
     marginBottom: 10,
+    textAlign: "center",
     fontSize: 20,
   },
-  recipes__days: {
+  store_section: {
     borderWidth: 1,
     borderColor: "#cbd5e0",
   },
+  style1: {
+    fontSize: 20,
+    backgroundColor: "green",
+    marginBottom: 10,
+  },
+  style2: {
+    fontSize: 20,
+    backgroundColor: "white",
+    marginBottom: 10,
+  },
+  style3: {
+    fontSize: 20,
+    backgroundColor: "orange",
+    marginBottom: 10,
+  },
+  style4: {
+    fontSize: 20,
+    backgroundColor: "pink",
+    marginBottom: 10,
+  },
   recipeContainer: {
-    width: 300,
+    width: 370,
     marginRight: 8,
     // borderWidth: 1,
   },
@@ -95,16 +134,6 @@ const styles = StyleSheet.create({
   recipeContainer__right: {
     color: "red",
     textAlign: "right",
-  },
-  header__days: {
-    fontSize: 20,
-    backgroundColor: "green",
-  },
-  recipeImg: {
-    width: 150,
-    height: 150,
-    borderRadius: 10,
-    marginLeft: 10,
   },
 });
 
