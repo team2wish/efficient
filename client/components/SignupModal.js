@@ -5,7 +5,7 @@ import { StyleSheet, View, Text, Button, TextInput } from "react-native";
 const SignupModal = ({ navigation }) => {
   const [adultcount, setAdultcount] = useState(0);
   const [childrencount, setChildrencount] = useState(0);
-  // const [isChecked, setChecked] = useState(false);
+  // const [isChecked, setIsChecked] = useState(false);
 
   const adultcountSub = () => {
     if (adultcount > 0) {
@@ -41,7 +41,7 @@ const SignupModal = ({ navigation }) => {
       {/* <Checkbox
         style={styles.checkbox}
         value={isChecked}
-        onValueChange={setChecked}
+        onValueChange={setIsChecked}
       /> */}
       <Text>チェックボックス実装予定</Text>
       <Button
@@ -65,6 +65,9 @@ const styles = StyleSheet.create({
     // flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
+  },
+  checkbox: {
+    alignSelf: "center",
   },
 });
 

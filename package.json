@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "concurrently": "^8.2.2",
-    "expo": "^49.0.21",
+    "expo": ">=50.0.0-0 <51.0.0",
     "react-native-bouncy-checkbox": "^3.0.7",
     "expo-checkbox": "~2.4.0"
   }
