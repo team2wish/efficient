@@ -6,7 +6,7 @@
   "scripts": {
     "setup": "npm install && npm install --prefix client && npm install --prefix server",
     "start": "node ./server/src/index.js",
-    "dev": "concurrently \"npm run dev --prefix client\" \"npm run watch --prefix client\" \"npm run dev --prefix server\"",
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run ios --prefix client\" ",
     "build": "npm run setup && npm run"
   },
   "keywords": [],
