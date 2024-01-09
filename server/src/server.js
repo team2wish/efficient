@@ -1,16 +1,15 @@
 const express = require("express");
-const path = require("path");
-// passportが使えるように追加
-const session = require("express-session");
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
 const knex = require("../knex.js");
+// token認証用のファイルを連れてきた
+const { authTokenServer } = require("./authenticate/auth_token");
 
 const setupServer = () => {
   const app = express();
   app.use(express.json());
   // publicフォルダにアクセスできるように設定
   app.use(express.static("public"));
+
+  authTokenServer(app);
 
   const calcStartWeekDate = (strDate) => {
     let today;
@@ -136,6 +135,17 @@ const setupServer = () => {
 
       cookProcess.push(resultObj);
     });
+
+    // お疲れ様でしたオブジェクトを更にpushする
+    const finishCooking = {
+      name: "",
+      text: "お疲れ様でした",
+      workTime: "",
+      imagePath: "homarekkuma",
+      completedDishImage: "message_otsukaresama",
+    };
+
+    cookProcess.push(finishCooking);
 
     res.status(200);
     res.send(cookProcess);
@@ -274,13 +284,6 @@ const setupServer = () => {
 
   app.get("/api/v1/shopping", async (req, res) => {
     const startWeek = calcStartWeekDate();
-    const groupArr = [
-      "menus.id",
-      "ingredient_list.genreId",
-      "ingredient_list.name",
-      "quantity",
-      "unit",
-    ];
 
     const shoppingList = await knex("menus")
       .join("foods", "menus.foodId", "foods.id")
@@ -326,12 +329,40 @@ const setupServer = () => {
       return acc;
     }, []);
 
-    // 結果を表示または操作
-    // console.log("shoppingList: ", shoppingList);
-    // console.log("transformedData: ", transformedData);
+    // if section が "調味料"だったら
+    const deDuplicationData = transformedData.map((elem) => {
+      if (elem.store_section === "調味料") {
+        let result = [];
+
+        const ans2 = {
+          sotore_section: "調味料",
+          items: [],
+        };
+        for (const name of elem.items) {
+          if (!result.includes(name.ingredient_name)) {
+            result.push(name.ingredient_name);
+          }
+        }
+
+        for (const name of result) {
+          ans2.items.push({
+            ingredient_name: name,
+            total_quantity: "",
+            unit: "",
+          });
+        }
+
+        return ans2;
+      } else {
+        return elem;
+      }
+    });
+
+    // ingredient_nameを重複なしにして
+    // total_quantityとunit を空文字("")にする
 
     res.status(200);
-    res.send(transformedData);
+    res.send(deDuplicationData);
   });
 
   app.get("/error", (req, res) => {
