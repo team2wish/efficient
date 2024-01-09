@@ -48,9 +48,13 @@ target 'test' do
   end
 
   config = use_native_modules!
-
+  
+  use_frameworks! :linkage => :static
+  # right after `use_frameworks! :linkage => :static`
+$RNFirebaseAsStaticFramework = true
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
   use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
+  use_modular_headers!
 
   # Flags change depending on the env values.
   flags = get_default_flags()
@@ -62,7 +66,7 @@ target 'test' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/..",
     # Note that if you have use_frameworks! enabled, Flipper will not work if enabled
-    :flipper_configuration => flipper_config
+    # :flipper_configuration => flipper_config
   )
 
   post_install do |installer|
