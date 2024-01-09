@@ -285,13 +285,6 @@ const setupServer = () => {
 
   app.get("/api/v1/shopping", async (req, res) => {
     const startWeek = calcStartWeekDate();
-    const groupArr = [
-      "menus.id",
-      "ingredient_list.genreId",
-      "ingredient_list.name",
-      "quantity",
-      "unit",
-    ];
 
     const shoppingList = await knex("menus")
       .join("foods", "menus.foodId", "foods.id")
@@ -366,7 +359,6 @@ const setupServer = () => {
       }
     });
 
-    console.log("重複消えてます？：", deDuplicationData);
     // ingredient_nameを重複なしにして
     // total_quantityとunit を空文字("")にする
 
