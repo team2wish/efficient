@@ -137,6 +137,17 @@ const setupServer = () => {
       cookProcess.push(resultObj);
     });
 
+    // お疲れ様でしたオブジェクトを更にpushする
+    const finishCooking = {
+      name: "",
+      text: "お疲れ様でした",
+      workTime: "",
+      imagePath: "finishCooking",
+      completedDishImage: "homare",
+    };
+
+    cookProcess.push(finishCooking);
+
     res.status(200);
     res.send(cookProcess);
   });
@@ -326,12 +337,41 @@ const setupServer = () => {
       return acc;
     }, []);
 
-    // 結果を表示または操作
-    // console.log("shoppingList: ", shoppingList);
-    // console.log("transformedData: ", transformedData);
+    // if section が "調味料"だったら
+    const deDuplicationData = transformedData.map((elem) => {
+      if (elem.store_section === "調味料") {
+        let result = [];
+
+        const ans2 = {
+          sotore_section: "調味料",
+          items: [],
+        };
+        for (const name of elem.items) {
+          if (!result.includes(name.ingredient_name)) {
+            result.push(name.ingredient_name);
+          }
+        }
+
+        for (const name of result) {
+          ans2.items.push({
+            ingredient_name: name,
+            total_quantity: "",
+            unit: "",
+          });
+        }
+
+        return ans2;
+      } else {
+        return elem;
+      }
+    });
+
+    console.log("重複消えてます？：", deDuplicationData);
+    // ingredient_nameを重複なしにして
+    // total_quantityとunit を空文字("")にする
 
     res.status(200);
-    res.send(transformedData);
+    res.send(deDuplicationData);
   });
 
   app.get("/error", (req, res) => {
