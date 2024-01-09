@@ -7,8 +7,8 @@
     "setup": "npm install && npm install --prefix client && npm install --prefix server",
     "start": "node ./server/src/index.js",
     "dev": "concurrently \"npm run dev --prefix server\" \"npm run ios --prefix client\" ",
-    "build2": "npm run setup && npm run",
-    "build": "npm run setup && npm run migrate --prefix server && npm run seed --prefix server && npm run"
+    "build": "npm run setup && npm run",
+    "build2": "npm run setup && npm run migrate --prefix server && npm run seed --prefix server && npm run"
   },
   "keywords": [],
   "author": "",
