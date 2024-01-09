@@ -142,8 +142,8 @@ const setupServer = () => {
       name: "",
       text: "お疲れ様でした",
       workTime: "",
-      imagePath: "finishCooking",
-      completedDishImage: "homare",
+      imagePath: "homarekkuma",
+      completedDishImage: "message_otsukaresama",
     };
 
     cookProcess.push(finishCooking);
