@@ -23,18 +23,20 @@ const authTokenServer = (app) => {
   passport.use(
     new LocalStrategy(
       {
-        usernameField: "user_name",
+        usernameField: "userName",
         passwordField: "password",
       },
       async (userName, password, done) => {
         try {
           const userData = await selectedUserByName(userName);
+          console.log("userData: ", userData);
           if (!userData || userData.length === 0) {
             return done(null, false, {
               message: "ユーザー名またはパスワードが異なります",
             });
           }
           const [isAuth, idArray] = await verifyPassword(userName, password);
+          console.log("isAuth: ", isAuth);
           if (isAuth) {
             return done(null, userData[0]);
           } else {
@@ -89,10 +91,8 @@ const authTokenServer = (app) => {
       if (!user) {
         return res.status(401).json({ message: info.message });
       }
-      req.logIn(user, (loginErr) => {
-        const token = generateAccessToken({ id: user.id });
-        res.status(200).json({ token });
-      });
+      const token = generateAccessToken({ id: user.id });
+      res.status(200).json({ token });
     })(req, res, next);
   });
 
@@ -103,13 +103,14 @@ const authTokenServer = (app) => {
 
   // 新規ユーザー登録用のエンドポイント
   app.post("/users/new", async (req, res) => {
-    const userName = req.body.user_name;
+    const userName = req.body.userName;
     const pw = req.body.password;
+    const mail = req.body.mail;
 
     //ユーザーネームが既存のものとかぶってないかをチェック
     let checkUniqueName;
     await knex("users")
-      .where({ user_name: userName })
+      .where({ userName: userName })
       .select()
       .then((data) => {
         checkUniqueName = data;
@@ -121,7 +122,7 @@ const authTokenServer = (app) => {
       //新規登録するuser_idを既存のuser_idの最大から決定する
       let newId;
       await knex("users")
-        .max("user_id as maxId")
+        .max("id as maxId")
         .then(([result]) => {
           newId = result.maxId + 1;
           return;
@@ -133,10 +134,20 @@ const authTokenServer = (app) => {
 
       //新規ユーザーをusersテーブルに登録する
       await knex("users").insert({
-        user_name: userName,
-        user_id: newId,
-        pw_hash: hashedPassword,
-        pw_salt: salt,
+        id: newId,
+        userName: userName,
+        mail: mail,
+        salt: salt,
+        hash: hashedPassword,
+        numOfAdults: 2,
+        numOfChildren: 1,
+        shrimp: false,
+        crab: false,
+        wheat: false,
+        buckwheat_noodles: false,
+        egg: false,
+        milk: false,
+        peanut: false,
       });
 
       //フロントに返すためにidを文字列化
