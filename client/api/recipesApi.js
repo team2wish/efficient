@@ -1,13 +1,48 @@
 import axiosClient from "./axiosClient";
 
 const recipesApi = {
-  getAll: () => axiosClient.get("/api/v1/recipes/all"),
-  getCooking: () => axiosClient.get("/api/v1/cooking"),
-  changeMainRecipes: () => axiosClient.get("/api/v1/recipes/search/isMain"),
-  changeSideRecipes: () => axiosClient.get("/api/v1/recipes/search/isSide"),
-  changeSoupRecipes: () => axiosClient.get("/api/v1/recipes/search/isSoup"),
-  changeRiceRecipes: () => axiosClient.get("/api/v1/recipes/search/isRice"),
-  getShopping: () => axiosClient.get("/api/v1/shopping"),
+  getAll: (token) =>
+    axiosClient.get("/api/v1/recipes/all", {
+      headers: {
+        authorization: `Berer ${token}`,
+      },
+    }),
+  getCooking: (token) =>
+    axiosClient.get("/api/v1/cooking", {
+      headers: {
+        authorization: `Berer ${token}`,
+      },
+    }),
+  changeMainRecipes: (token) =>
+    axiosClient.get("/api/v1/recipes/search/isMain", {
+      headers: {
+        authorization: `Berer ${token}`,
+      },
+    }),
+  changeSideRecipes: (token) =>
+    axiosClient.get("/api/v1/recipes/search/isSide", {
+      headers: {
+        authorization: `Berer ${token}`,
+      },
+    }),
+  changeSoupRecipes: (token) =>
+    axiosClient.get("/api/v1/recipes/search/isSoup", {
+      headers: {
+        authorization: `Berer ${token}`,
+      },
+    }),
+  changeRiceRecipes: (token) =>
+    axiosClient.get("/api/v1/recipes/search/isRice", {
+      headers: {
+        authorization: `Berer ${token}`,
+      },
+    }),
+  getShopping: (token) =>
+    axiosClient.get("/api/v1/shopping", {
+      headers: {
+        authorization: `Berer ${token}`,
+      },
+    }),
 };
 
 export default recipesApi;
