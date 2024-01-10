@@ -440,7 +440,7 @@ const authTokenServer = (app) => {
     res.send(cookProcess);
   });
 
-  // 買い物リストを返す No.5 userId対応完了 済🎉
+  // 買い物リストを返す No.9 userId対応完了 済🎉
   app.get("/api/v1/shopping", authenticateToken, async (req, res) => {
     const startWeek = calcStartWeekDate();
 
