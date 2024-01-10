@@ -4,12 +4,10 @@ import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
 
-const Recipes = ({ navigation }) => {
+const Recipes = ({ navigation, token }) => {
   const [fiveRecipes, setFiveRecipes] = useState();
-
   const getAllRecipes = async () => {
-    const res = await recipesApi.getAll();
-    // console.log("data", res.data);
+    const res = await recipesApi.getAll(token);
     if (res.data) {
       setFiveRecipes(res.data);
     }
@@ -18,7 +16,6 @@ const Recipes = ({ navigation }) => {
   useEffect(() => {
     getAllRecipes();
   }, [fiveRecipes]);
-  // }, []);
 
   const changeRecipes = (beforeId, date, category) => {
     // console.log("e-------side", beforeId, date, category);

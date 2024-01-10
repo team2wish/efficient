@@ -5,13 +5,12 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
 import Checkbox from "expo-checkbox";
 
-const ShoppingListScreen = () => {
+const ShoppingListScreen = ({ token }) => {
   const [shoppingList, setShoppingList] = useState();
   const [isChecked, setIsChecked] = useState({});
 
   const getShoppingList = async () => {
-    const res = await recipesApi.getShopping();
-    // console.log("data", res.data);
+    const res = await recipesApi.getShopping(token);
     if (res.data) {
       setShoppingList(res.data);
     }
