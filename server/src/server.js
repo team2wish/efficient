@@ -2,7 +2,7 @@ const express = require("express");
 const knex = require("../knex.js");
 // token認証用のファイルを連れてきた
 const { authTokenServer } = require("./authenticate/auth_token");
-const { staticServer } = require("./static");
+// const { staticServer } = require("./static");
 
 const setupServer = () => {
   const app = express();
@@ -11,7 +11,7 @@ const setupServer = () => {
   app.use(express.static("public"));
 
   authTokenServer(app);
-  staticServer(app);
+  // staticServer(app);
 
   return app;
 };
