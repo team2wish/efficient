@@ -51,7 +51,7 @@ exports.seed = function (knex) {
         {
           foodId: 2,
           text: "合わせ調味料を入れて味をつけます",
-          imageId: 25,
+          imageId: 27,
           kindId: 18,
           workTime: 1,
           canWrap: false,
@@ -115,7 +115,7 @@ exports.seed = function (knex) {
         {
           foodId: 3,
           text: "合わせ調味料を入れて全体を絡める",
-          imageId: 19,
+          imageId: 73,
           kindId: 22,
           workTime: 1,
           canWrap: false,
@@ -163,7 +163,7 @@ exports.seed = function (knex) {
         {
           foodId: 8,
           text: "トマトとアボカドを切る。トマトは洗っておく。",
-          imageId: 10,
+          imageId: 32,
           kindId: 3,
           workTime: 2,
           canWrap: false,
@@ -370,8 +370,8 @@ exports.seed = function (knex) {
         },
         {
           foodId: 10,
-          text: "水気をしっかり切ってタレを加えて軽く和えてください",
-          imageId: 44,
+          text: "水気をしっかり切って焼き肉のタレを大さじ２加えて軽く和えてください",
+          imageId: 72,
           kindId: 25,
           workTime: 1,
           canWrap: false,

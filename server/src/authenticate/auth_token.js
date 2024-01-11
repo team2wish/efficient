@@ -139,15 +139,15 @@ const authTokenServer = (app) => {
         mail: mail,
         salt: salt,
         hash: hashedPassword,
-        numOfAdults: 2,
-        numOfChildren: 1,
-        shrimp: false,
-        crab: false,
-        wheat: false,
-        buckwheat_noodles: false,
-        egg: false,
-        milk: false,
-        peanut: false,
+        numOfAdults: Number(req.body.numOfAdults),
+        numOfChildren: Number(req.body.numOfChildren),
+        shrimp: Boolean(req.body.shrimp),
+        crab: Boolean(req.body.crab),
+        wheat: Boolean(req.body.wheat),
+        buckwheat_noodles: Boolean(req.body.buckwheat_noodles),
+        egg: Boolean(req.body.egg),
+        milk: Boolean(req.body.milk),
+        peanut: Boolean(req.body.peanut),
       });
 
       //フロントに返すためにidを文字列化
@@ -188,8 +188,7 @@ const authTokenServer = (app) => {
   app.get("/api/v1/recipes/all", authenticateToken, async (req, res) => {
     const startWeek = calcStartWeekDate();
     const userId = req.user.id;
-    console.log("===========userId: ", userId);
-    // const userId = 1;
+
     let kondate = await knex("menus")
       .join("foods", "menus.foodId", "=", "foods.id")
       .join("images", "foods.pictPathId", "=", "images.id")
@@ -233,19 +232,40 @@ const authTokenServer = (app) => {
           soupAndRiceArr[RandIndex],
         ];
       }
+
+      // 最終日(1/19のDemoDayの献立を固定するためのカウント)
+      let dayCount = 0;
+      const lastFoodIdArr = [3, 10, 12];
       for (date in menu) {
-        for (foodId of menu[date]) {
-          countId++;
-          await knex("menus").insert([
-            {
-              id: countId,
-              userId: userId,
-              foodId: foodId,
-              startWeek: startWeek,
-              date: date,
-              timingFlag: 2,
-            },
-          ]);
+        dayCount++;
+        if (dayCount < 5) {
+          for (foodId of menu[date]) {
+            countId++;
+            await knex("menus").insert([
+              {
+                id: countId,
+                userId: userId,
+                foodId: foodId,
+                startWeek: startWeek,
+                date: date,
+                timingFlag: 2,
+              },
+            ]);
+          }
+        } else {
+          for (foodId of lastFoodIdArr) {
+            countId++;
+            await knex("menus").insert([
+              {
+                id: countId,
+                userId: userId,
+                foodId: foodId,
+                startWeek: startWeek,
+                date: date,
+                timingFlag: 2,
+              },
+            ]);
+          }
         }
       }
 
