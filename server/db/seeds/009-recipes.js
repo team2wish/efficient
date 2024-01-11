@@ -371,7 +371,7 @@ exports.seed = function (knex) {
         {
           foodId: 10,
           text: "水気をしっかり切って焼き肉のタレを大さじ２加えて軽く和えてください",
-          imageId: 44,
+          imageId: 72,
           kindId: 25,
           workTime: 1,
           canWrap: false,
