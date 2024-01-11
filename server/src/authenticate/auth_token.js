@@ -188,8 +188,7 @@ const authTokenServer = (app) => {
   app.get("/api/v1/recipes/all", authenticateToken, async (req, res) => {
     const startWeek = calcStartWeekDate();
     const userId = req.user.id;
-    console.log("===========userId: ", userId);
-    // const userId = 1;
+
     let kondate = await knex("menus")
       .join("foods", "menus.foodId", "=", "foods.id")
       .join("images", "foods.pictPathId", "=", "images.id")
@@ -233,6 +232,9 @@ const authTokenServer = (app) => {
           soupAndRiceArr[RandIndex],
         ];
       }
+
+      // 最終日(1/19のDemoDayの献立を固定するためのカウント)
+      let dayCount = 0;
       for (date in menu) {
         for (foodId of menu[date]) {
           countId++;
