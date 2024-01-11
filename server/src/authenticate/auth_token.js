@@ -235,19 +235,37 @@ const authTokenServer = (app) => {
 
       // 最終日(1/19のDemoDayの献立を固定するためのカウント)
       let dayCount = 0;
+      const lastFoodIdArr = [3, 10, 12];
       for (date in menu) {
-        for (foodId of menu[date]) {
-          countId++;
-          await knex("menus").insert([
-            {
-              id: countId,
-              userId: userId,
-              foodId: foodId,
-              startWeek: startWeek,
-              date: date,
-              timingFlag: 2,
-            },
-          ]);
+        dayCount++;
+        if (dayCount < 5) {
+          for (foodId of menu[date]) {
+            countId++;
+            await knex("menus").insert([
+              {
+                id: countId,
+                userId: userId,
+                foodId: foodId,
+                startWeek: startWeek,
+                date: date,
+                timingFlag: 2,
+              },
+            ]);
+          }
+        } else {
+          for (foodId of lastFoodIdArr) {
+            countId++;
+            await knex("menus").insert([
+              {
+                id: countId,
+                userId: userId,
+                foodId: foodId,
+                startWeek: startWeek,
+                date: date,
+                timingFlag: 2,
+              },
+            ]);
+          }
         }
       }
 
