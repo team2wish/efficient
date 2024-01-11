@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button, TextInput } from "react-native";
+import { StyleSheet, View, Text, Button, TextInput, Alert } from "react-native";
+import authApi from "../api/authApi";
 
 const Signup = ({ navigation, route }) => {
   const [name, setName] = useState("");
   const [mailAddress, setMailAddress] = useState("");
   const [password, setPassword] = useState("");
-
-  //SignupModalから値取得は確認OK
-  console.log("SignupModalの入力情報:", route.params);
 
   const onChangeName = (value) => {
     setName(value);
@@ -19,12 +17,15 @@ const Signup = ({ navigation, route }) => {
     setPassword(value);
   };
 
-  //name,mailaddres,password,adulucount,childrencount,allergy入力したらそのデータをバックへポストする
-  //未実装
-
+  const showSignupModal = () => {
+    if (name === "" && mailAddress === "" && password === "") {
+      Alert.alert("ユーザー情報を入力してください");
+    } else {
+      navigation.navigate("SignupModal", [name, mailAddress, password]);
+    }
+  };
   return (
     <View style={styles.container}>
-      <Text>signup</Text>
       <TextInput
         style={styles.nameInput}
         value={name}
@@ -45,18 +46,12 @@ const Signup = ({ navigation, route }) => {
       ></TextInput>
       <Button
         styles={styles.button}
-        title="アレルギー入力"
-        onPress={() => navigation.navigate("SignupModal")}
-      />
-      <Button
-        styles={styles.button}
-        title="新規登録"
-        onPress={() => navigation.navigate("Home")}
+        title="初期設定"
+        onPress={showSignupModal}
       />
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
@@ -67,24 +62,26 @@ const styles = StyleSheet.create({
     height: 40,
     width: 300,
     padding: 10,
-    borderColor: "green",
+    marginTop: 50,
+    marginBottom: 20,
+    borderColor: "black",
     borderWidth: 1,
   },
   mailAddresInput: {
     height: 40,
     width: 300,
     padding: 10,
-    borderColor: "green",
+    marginBottom: 20,
+    borderColor: "black",
     borderWidth: 1,
   },
   passwordInput: {
     height: 40,
     width: 300,
     padding: 10,
-    borderColor: "green",
+    borderColor: "black",
     borderWidth: 1,
     marginBottom: 20,
   },
 });
-
 export default Signup;

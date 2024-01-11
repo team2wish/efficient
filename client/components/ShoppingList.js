@@ -4,15 +4,23 @@ import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
 import Checkbox from "expo-checkbox";
+import { useNavigation } from "@react-navigation/native";
 
 const ShoppingListScreen = ({ token }) => {
   const [shoppingList, setShoppingList] = useState();
   const [isChecked, setIsChecked] = useState({});
+  const useNavigate = useNavigation();
 
   const getShoppingList = async () => {
-    const res = await recipesApi.getShopping(token);
-    if (res.data) {
-      setShoppingList(res.data);
+    try {
+      const res = await recipesApi.getShopping(token);
+      if (res.data) {
+        setShoppingList(res.data);
+      }
+    } catch (e) {
+      Alert.alert("セッションが切れました\n再度ログインしてください");
+      useNavigate.navigate("Login");
+      console.error("Recipes", e);
     }
   };
 

@@ -5,6 +5,7 @@ import { View, Text, StyleSheet, Button, Image } from "react-native";
 import * as Speech from "expo-speech";
 // import Tts from 'react-native-tts';
 import "../assets/icon.png";
+import { useNavigation } from "@react-navigation/native";
 
 const CookProcess = ({ navigation, token }) => {
   const [count, setCount] = useState(0);
@@ -12,11 +13,18 @@ const CookProcess = ({ navigation, token }) => {
   const [speaking, setSpeaking] = useState(false);
   const [cookProcess, setCookProcess] = useState();
   const [result, setResult] = useState("");
+  const useNavigate = useNavigation();
 
   const getCookProcess = async () => {
-    const res = await recipesApi.getCooking(token);
-    setCookProcess(res.data);
-    Speech.speak(res.data[0].text);
+    try {
+      const res = await recipesApi.getCooking(token);
+      setCookProcess(res.data);
+      Speech.speak(res.data[0].text);
+    } catch (e) {
+      Alert.alert("セッションが切れました\n再度ログインしてください");
+      useNavigate.navigate("Login");
+      console.error("Recipes", e);
+    }
   };
 
   const speechStartHandler = (e) => {
