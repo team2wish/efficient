@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, Image, StyleSheet } from "react-native";
+import { View, Text, Button, Image, StyleSheet, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
+import { useNavigation } from "@react-navigation/native";
 
-const Recipes = ({ navigation, token }) => {
+const Recipes = ({ navigation, token, setLogin }) => {
   const [fiveRecipes, setFiveRecipes] = useState();
+  const useNavigate = useNavigation();
+
   const getAllRecipes = async () => {
-    const res = await recipesApi.getAll(token);
-    if (res.data) {
-      setFiveRecipes(res.data);
+    try {
+      const res = await recipesApi.getAll(token);
+      if (res.data) {
+        setFiveRecipes(res.data);
+      }
+    } catch (e) {
+      Alert.alert("セッションが切れました\n再度ログインしてください");
+      useNavigate.navigate("Login");
+      console.error("Recipes", e);
     }
   };
 
@@ -18,7 +27,6 @@ const Recipes = ({ navigation, token }) => {
   }, [fiveRecipes]);
 
   const changeRecipes = (beforeId, date, category) => {
-    // console.log("e-------side", beforeId, date, category);
     if (category === "isMain") {
       navigation.navigate("MainRecipesList", [
         date,

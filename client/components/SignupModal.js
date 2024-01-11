@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, Button, TextInput } from "react-native";
 import Checkbox from "expo-checkbox";
-
 const SignupModal = ({ navigation }) => {
   const [adultcount, setAdultcount] = useState(0);
   const [childrencount, setChildrencount] = useState(0);
@@ -13,7 +12,6 @@ const SignupModal = ({ navigation }) => {
   const [eggChecked, setEggChecked] = useState(false);
   const [milkChecked, setMilkChecked] = useState(false);
   const [peanutChecked, setPeanutChecked] = useState(false);
-
   const adultcountSub = () => {
     if (adultcount > 0) {
       setAdultcount(adultcount - 1);
@@ -34,16 +32,18 @@ const SignupModal = ({ navigation }) => {
       setChildrencount(childrencount + 1);
     }
   };
-
   return (
     <View style={styles.container}>
-      <Text>SignupModal</Text>
-      <Text>大人 {adultcount}名</Text>
-      <Button title="ー" onPress={adultcountSub} />
-      <Button title="＋" onPress={adultcountAdd} />
-      <Text>子供 {childrencount}名</Text>
-      <Button title="ー" onPress={childrencountSub} />
-      <Button title="＋" onPress={childrencountAdd} />
+      <View style={styles.container__adult}>
+        <Text style={styles.adult}>大人 {adultcount}名</Text>
+        <Button title="ー" onPress={adultcountSub} />
+        <Button title="＋" onPress={adultcountAdd} />
+      </View>
+      <View style={styles.container__chiliren}>
+        <Text>子供 {childrencount}名</Text>
+        <Button title="ー" onPress={childrencountSub} />
+        <Button title="＋" onPress={childrencountAdd} />
+      </View>
       <View style={styles.checkboxContainer}>
         <Text>えびアレルギー</Text>
         <Checkbox
@@ -120,12 +120,25 @@ const SignupModal = ({ navigation }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
+  },
+  container__adult: {
+    flexDirection: "row",
+    justifyContent: "center", // 中央揃え
+    alignItems: "center", // 中央揃え
+  },
+  adult: {
+    textAlign: "center",
+  },
+  container__chiliren: {
+    flexDirection: "row",
+    justifyContent: "center", // 中央揃え
+    alignItems: "center", // 中央揃え
+    marginBottom: 20,
   },
   button: {
     // flex: 1,
@@ -135,10 +148,11 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 10,
   },
   checkbox: {
-    alignSelf: "center",
+    // alignSelf: "center",
+    // marginBottom: 10,
   },
 });
-
 export default SignupModal;
