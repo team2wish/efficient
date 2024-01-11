@@ -12,6 +12,7 @@ import SideRecipesListScreen from "./screens/SideRecipesListScreen";
 import SignupModalScreen from "./screens/SignupModalScreen";
 import RiceRecipesListScreen from "./screens/RiceRecipesListScreen";
 import SoupRecipesListScreen from "./screens/SoupRecipesListScreen";
+import { StyleSheet } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,8 +20,18 @@ export default function App() {
   return (
     <NavigationContainer initialRouteName="User">
       {/* スタック遷移 */}
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: styles.container.backgroundColor,
+          },
+          headerTitleStyle: {
+            fontFamily: "ヒラギノ角ゴ ProN W3",
+            fontSize: 20,
+          },
+        }}
+      >
+        <Stack.Screen name="ログイン" component={LoginScreen} />
         <Stack.Screen
           name="Home"
           component={HomeTabs}
@@ -56,3 +67,11 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#F8F7EE",
+
+    // backgroundColor: "red",
+  },
+});
