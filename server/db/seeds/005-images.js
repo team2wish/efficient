@@ -77,5 +77,6 @@ exports.seed = async function (knex) {
     { id: 70, imagePath: "teriyaki_nikarameru.png" },
     { id: 71, imagePath: "aonegi_koguchicut.png" },
     { id: 72, imagePath: "tomyo_ae.jpg" },
+    { id: 73, imagePath: "nasu-pi-man-add-sauce.jpg" },
   ]);
 };

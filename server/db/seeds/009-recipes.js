@@ -115,7 +115,7 @@ exports.seed = function (knex) {
         {
           foodId: 3,
           text: "合わせ調味料を入れて全体を絡める",
-          imageId: 19,
+          imageId: 73,
           kindId: 22,
           workTime: 1,
           canWrap: false,
