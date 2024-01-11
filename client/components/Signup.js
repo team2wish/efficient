@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, Button, TextInput, Alert } from "react-native";
-import axiosClient from "../api/axiosClient";
+import authApi from "../api/authApi";
+
 const Signup = ({ navigation, route }) => {
   const [name, setName] = useState("");
   const [mailAddress, setMailAddress] = useState("");
   const [password, setPassword] = useState("");
-  //SignupModalから値取得は確認OK
-  console.log("SignupModalの入力情報:", route.params);
+
   const onChangeName = (value) => {
     setName(value);
   };
@@ -16,27 +16,12 @@ const Signup = ({ navigation, route }) => {
   const onChangePassword = (value) => {
     setPassword(value);
   };
-  //name,mailaddres,password,adulucount,childrencount,allergy入力したらそのデータをバックへポストする
-  const signupPost = async () => {
-    if (typeof route.params !== "undefined") {
-      // const res = await axiosClient.post("/api/v1/auth/signup", {
-      //   name: name,
-      //   mailaddress: mailAddress,
-      //   password: password,
-      //   adultcount: route.params[0],
-      //   childrencount: route.params[1],
-      //   allergy: route.params[2],
-      //   allergy2: route.params[3],
-      //   allergy3: route.params[4],
-      //   allergy4: route.params[5],
-      //   allergy5: route.params[6],
-      //   allergy6: route.params[7],
-      //   allergy7: route.params[8],
-      // });
-      // console.log("data", res.data);
-      navigation.navigate("Home");
+
+  const showSignupModal = () => {
+    if (name === "" && mailAddress === "" && password === "") {
+      Alert.alert("ユーザー情報を入力してください");
     } else {
-      Alert.alert("アレルギーを入力して下さい");
+      navigation.navigate("SignupModal", [name, mailAddress, password]);
     }
   };
   return (
@@ -61,13 +46,8 @@ const Signup = ({ navigation, route }) => {
       ></TextInput>
       <Button
         styles={styles.button}
-        title="アレルギー入力"
-        onPress={() => navigation.navigate("SignupModal")}
-      />
-      <Button
-        styles={styles.button}
-        title="新規登録"
-        onPress={() => signupPost()}
+        title="初期設定"
+        onPress={showSignupModal}
       />
     </View>
   );

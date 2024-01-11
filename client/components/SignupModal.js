@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, Button, TextInput } from "react-native";
 import Checkbox from "expo-checkbox";
-const SignupModal = ({ navigation }) => {
+import authApi from "../api/authApi";
+const SignupModal = ({ navigation, route }) => {
   const [adultcount, setAdultcount] = useState(0);
   const [childrencount, setChildrencount] = useState(0);
   const [shrimpChecked, setShrimpChecked] = useState(false);
@@ -12,6 +13,7 @@ const SignupModal = ({ navigation }) => {
   const [eggChecked, setEggChecked] = useState(false);
   const [milkChecked, setMilkChecked] = useState(false);
   const [peanutChecked, setPeanutChecked] = useState(false);
+
   const adultcountSub = () => {
     if (adultcount > 0) {
       setAdultcount(adultcount - 1);
@@ -32,6 +34,35 @@ const SignupModal = ({ navigation }) => {
       setChildrencount(childrencount + 1);
     }
   };
+
+  const signupPost = async () => {
+    if (typeof route.params !== "undefined") {
+      const name = route.params[0];
+      const mailaddress = route.params[1];
+      const password = route.params[2];
+      const data = {
+        userName: name,
+        mail: mailaddress,
+        pw: password,
+        numOfAdults: adultcount,
+        numOfChildren: childrencount,
+        shrimp: shrimpChecked,
+        crab: crabChecked,
+        wheat: wheatChecked,
+        buckwheat_noodles: buckwheat_noodlesChecked,
+        egg: eggChecked,
+        milk: milkChecked,
+        peanut: peanutChecked,
+      };
+      const res = await authApi.signUp(data);
+      const token = await authApi.login(name, password);
+      console.log("token", token);
+      navigation.navigate("Home");
+    } else {
+      Alert.alert("アレルギーを入力して下さい");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.container__adult}>
@@ -102,20 +133,9 @@ const SignupModal = ({ navigation }) => {
       </View>
       <Button
         styles={styles.button}
-        title="新規登録画面へ戻る"
-        onPress={() => {
-          navigation.navigate("Signup", [
-            adultcount,
-            childrencount,
-            shrimpChecked,
-            crabChecked,
-            wheatChecked,
-            buckwheat_noodlesChecked,
-            eggChecked,
-            milkChecked,
-            peanutChecked,
-          ]);
-        }}
+        // title="新規登録画面へ戻る"
+        title="新規登録"
+        onPress={signupPost}
       />
     </View>
   );
