@@ -29,14 +29,12 @@ const authTokenServer = (app) => {
       async (userName, password, done) => {
         try {
           const userData = await selectedUserByName(userName);
-          console.log("userData: ", userData);
           if (!userData || userData.length === 0) {
             return done(null, false, {
               message: "ユーザー名またはパスワードが異なります",
             });
           }
           const [isAuth, idArray] = await verifyPassword(userName, password);
-          console.log("isAuth: ", isAuth);
           if (isAuth) {
             return done(null, userData[0]);
           } else {
@@ -104,7 +102,7 @@ const authTokenServer = (app) => {
   // サインアップ用のAPI No.8
   app.post("/api/v1/auth/signup", async (req, res) => {
     const userName = req.body.userName;
-    const pw = req.body.password;
+    const password = req.body.password;
     const mail = req.body.mail;
 
     //ユーザーネームが既存のものとかぶってないかをチェック
@@ -130,7 +128,7 @@ const authTokenServer = (app) => {
 
       //パスワードのソルトを作成
       const salt = crypto.randomBytes(6).toString("hex");
-      const hashedPassword = makeHash(pw, salt);
+      const hashedPassword = makeHash(password, salt);
 
       //新規ユーザーをusersテーブルに登録する
       await knex("users").insert({
