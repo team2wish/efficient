@@ -44,7 +44,7 @@ const Login = ({ navigation }) => {
   const getData = async () => {
     try {
       const tokenValue = await AsyncStorage.getItem("my-key");
-      console.log(tokenValue);
+      console.log("loginPageTokenValue", tokenValue);
       if (tokenValue !== null) {
         setLogin(true);
         await authApi.checkAuth(tokenValue);

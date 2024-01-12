@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text, Button, TextInput } from "react-native";
 import Checkbox from "expo-checkbox";
 import authApi from "../api/authApi";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const SignupModal = ({ navigation, route }) => {
   const [adultcount, setAdultcount] = useState(0);
   const [childrencount, setChildrencount] = useState(0);
@@ -43,7 +45,7 @@ const SignupModal = ({ navigation, route }) => {
       const data = {
         userName: name,
         mail: mailaddress,
-        pw: password,
+        password: password,
         numOfAdults: adultcount,
         numOfChildren: childrencount,
         shrimp: shrimpChecked,
@@ -55,11 +57,21 @@ const SignupModal = ({ navigation, route }) => {
         peanut: peanutChecked,
       };
       const res = await authApi.signUp(data);
-      const token = await authApi.login(name, password);
-      console.log("token", token);
-      navigation.navigate("Home");
+      const fetchlogin = await authApi.login(name, password);
+      const tokenValue = fetchlogin.data.token;
+      console.log("signUpTokenValue", tokenValue);
+      await storeData(tokenValue);
+      navigation.navigate("Signup", ["login", tokenValue]);
     } else {
       Alert.alert("アレルギーを入力して下さい");
+    }
+  };
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem("my-key", value);
+    } catch (e) {
+      console.error(e);
     }
   };
 

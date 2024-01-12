@@ -7,7 +7,7 @@ const CalenderScreen = ({ navigation }) => {
   return (
     <View>
       <Text>Calender画面</Text>
-      <Button title="ログアウト" onPress={() => navigation.navigate("Login")} />
+      {/* <Button title="ログアウト" onPress={() => navigation.navigate("Login")} /> */}
       <Calendar />
       {/* //関連ファイル削除する */}
       {/* <Button title="ユーザ" onPress={() => navigation.navigate("User")} /> */}
