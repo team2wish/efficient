@@ -25,9 +25,9 @@ const Login = ({ navigation }) => {
   const loginFn = async () => {
     const res = await authApi.login(username, password);
     if (res.data) {
-      const tokenValue = res.data.token;
-      storeData(tokenValue);
-      navigation.navigate("Home", tokenValue);
+      const token = res.data.token;
+      storeData(token);
+      navigation.navigate("Home", { token: token, update: false });
       setUsername("");
       setPassword("");
     }
@@ -43,31 +43,20 @@ const Login = ({ navigation }) => {
 
   const getData = async () => {
     try {
-      const tokenValue = await AsyncStorage.getItem("my-key");
-      console.log("loginPageTokenValue", tokenValue);
-      if (tokenValue !== null) {
+      const token = await AsyncStorage.getItem("my-key");
+      if (token !== null) {
         setLogin(true);
-        await authApi.checkAuth(tokenValue);
-        navigation.navigate("Home", tokenValue);
+        await authApi.checkAuth(token);
+        navigation.navigate("Home", { token: token, update: false });
       }
     } catch (e) {
       console.error("checkAuth", e);
     }
   };
 
-  const removeItem = async (value) => {
-    try {
-      await AsyncStorage.removeItem("my-key");
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   useEffect(() => {
-    // removeItem();
     setLogin(false);
     getData();
-
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       setKeyboardStatus("Keyboard Shown");
     });
@@ -101,12 +90,7 @@ const Login = ({ navigation }) => {
               onChangeText={onChangePassword}
               onSubmitEditing={Keyboard.dismiss}
             ></TextInput>
-            <Button
-              styles={styles.button}
-              title="ログイン"
-              // onPress={() => navigation.navigate('Home')}
-              onPress={loginFn}
-            />
+            <Button styles={styles.button} title="ログイン" onPress={loginFn} />
             <Button
               styles={styles.button}
               title="アカウント新規作成"

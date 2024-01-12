@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button, TextInput } from "react-native";
+import { StyleSheet, View, Text, Button, TextInput, Alert } from "react-native";
 import Checkbox from "expo-checkbox";
 import authApi from "../api/authApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -58,10 +58,10 @@ const SignupModal = ({ navigation, route }) => {
       };
       const res = await authApi.signUp(data);
       const fetchlogin = await authApi.login(name, password);
-      const tokenValue = fetchlogin.data.token;
-      console.log("signUpTokenValue", tokenValue);
-      await storeData(tokenValue);
-      navigation.navigate("Signup", ["login", tokenValue]);
+      const token = fetchlogin.data.token;
+      await storeData(token);
+      navigation.navigate("Signup");
+      navigation.navigate("Home", { token: token, update: false });
     } else {
       Alert.alert("アレルギーを入力して下さい");
     }

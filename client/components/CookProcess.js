@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Voice from "@react-native-voice/voice";
 import recipesApi from "../api/recipesApi";
-import { View, Text, StyleSheet, Button, Image } from "react-native";
+import { View, Text, StyleSheet, Button, Image, Alert } from "react-native";
 import * as Speech from "expo-speech";
-// import Tts from 'react-native-tts';
 import "../assets/icon.png";
 import { useNavigation } from "@react-navigation/native";
 
-const CookProcess = ({ navigation, token }) => {
+const CookProcess = ({ route }) => {
   const [count, setCount] = useState(0);
   const [recoding, setRecoding] = useState(false);
-  const [speaking, setSpeaking] = useState(false);
   const [cookProcess, setCookProcess] = useState();
   const [result, setResult] = useState("");
   const useNavigate = useNavigation();
+  const token = route.params.token;
 
   const getCookProcess = async () => {
     try {
@@ -22,7 +21,7 @@ const CookProcess = ({ navigation, token }) => {
       Speech.speak(res.data[0].text);
     } catch (e) {
       Alert.alert("セッションが切れました\n再度ログインしてください");
-      useNavigate.navigate("Login");
+      useNavigate.navigate("ログイン");
       console.error("Recipes", e);
     }
   };
@@ -82,11 +81,6 @@ const CookProcess = ({ navigation, token }) => {
     if (result.slice(-1) === "次" && count < cookProcess.length - 1) {
       setCount(count + 1);
       Speech.speak(cookProcess[count + 1].text);
-      // Tts.speak(cookProcess[count + 1].text, {
-      //   iosVoiceId: 'com.apple.ttsbundle.Kyoko-compact',
-      //   rate: 0.5,
-      //   language: 'ja-JP',
-      // });
     }
     if (result.slice(-1) === "前" && count >= 0) {
       setCount(count - 1);
@@ -116,11 +110,8 @@ const CookProcess = ({ navigation, token }) => {
           />
         </View>
         <View style={styles.viewControl}>
-          {/* <Button title="Press to hear some words" onPress={speak} /> */}
-          {/* <Button title="前へ" onPress={beforeProcess} />
-          <Button title="次へ" onPress={afterProcess} /> */}
-          <Button title="録音" onPress={startRecoding} />
-          <Button title="停止" onPress={stopRecoding} />
+          {/* <Button title="録音" onPress={startRecoding} />
+          <Button title="停止" onPress={stopRecoding} /> */}
         </View>
       </View>
     )

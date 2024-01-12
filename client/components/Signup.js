@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Button, TextInput, Alert } from "react-native";
 import authApi from "../api/authApi";
 
-const Signup = ({ navigation, route }) => {
+const Signup = ({ navigation }) => {
   const [name, setName] = useState("");
   const [mailAddress, setMailAddress] = useState("");
   const [password, setPassword] = useState("");
-  const [userLogin, setUserLogin] = useState(false);
 
   const onChangeName = (value) => {
     setName(value);
@@ -19,21 +18,12 @@ const Signup = ({ navigation, route }) => {
   };
 
   const showSignupModal = () => {
-    if (name === "" && mailAddress === "" && password === "") {
+    if (name === "" || mailAddress === "" || password === "") {
       Alert.alert("ユーザー情報を入力してください");
     } else {
       navigation.navigate("SignupModal", [name, mailAddress, password]);
     }
   };
-
-  useEffect(() => {
-    if (route.params) {
-      if (route.params[0] === "login" && !userLogin) {
-        setUserLogin(true);
-        navigation.navigate("Home", route.params[1]);
-      }
-    }
-  }, [route.params, userLogin]);
 
   return (
     <View style={styles.container}>

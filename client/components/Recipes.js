@@ -5,9 +5,11 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
 import { useNavigation } from "@react-navigation/native";
 
-const Recipes = ({ navigation, token, setLogin }) => {
+const Recipes = ({ route }) => {
   const [fiveRecipes, setFiveRecipes] = useState();
+
   const useNavigate = useNavigation();
+  const token = route.params.token;
 
   const getAllRecipes = async () => {
     try {
@@ -17,57 +19,50 @@ const Recipes = ({ navigation, token, setLogin }) => {
       }
     } catch (e) {
       Alert.alert("セッションが切れました\n再度ログインしてください");
-      useNavigate.navigate("Login");
+      useNavigate.navigate("ログイン");
       console.error("Recipes", e);
     }
   };
 
   useEffect(() => {
     getAllRecipes();
-  }, [fiveRecipes]);
+  }, []);
+
+  useEffect(() => {
+    if (route.params.update) {
+      getAllRecipes();
+      route.params.update = false;
+    }
+  }, [route.params.update]);
 
   const changeRecipes = (beforeId, date, category) => {
     if (category === "isMain") {
-      navigation.navigate("MainRecipesList", [
-        date,
-        beforeId,
-        fiveRecipes,
-        setFiveRecipes,
-      ]);
+      useNavigate.navigate("MainRecipesList", [date, beforeId, token]);
     } else if (category === "isSide") {
-      navigation.navigate("SideRecipesList", [
-        date,
-        beforeId,
-        fiveRecipes,
-        setFiveRecipes,
-      ]);
+      useNavigate.navigate("SideRecipesList", [date, beforeId, token]);
     } else if (category === "isSoup") {
-      // console.log("soupだよ");
-      navigation.navigate("SoupRecipesList", [
-        date,
-        beforeId,
-        fiveRecipes,
-        setFiveRecipes,
-      ]);
+      useNavigate.navigate("SoupRecipesList", [date, beforeId, token]);
     } else {
-      // console.log("riceだよ");
-      navigation.navigate("RiceRecipesList", [
-        date,
-        beforeId,
-        fiveRecipes,
-        setFiveRecipes,
-      ]);
+      useNavigate.navigate("RiceRecipesList", [date, beforeId, token]);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header__top}>12/18(月) ~ 12/22(金)</Text>
+      {fiveRecipes && (
+        <View style={styles.header__top}>
+          <Text>{`${fiveRecipes[0].date.slice(5)}`}</Text>
+          <Text>月</Text>
+          <Text> 〜 </Text>
+          <Text>{`${fiveRecipes[4].date.slice(5)}`}</Text>
+          <Text>金</Text>
+        </View>
+      )}
+
       <GestureHandlerRootView>
         <ScrollView>
           {fiveRecipes &&
             fiveRecipes.map((dateRecipe) => {
-              // console.log("daterecipe2", recipesData);
               const totalCookTime = dateRecipe.food.reduce(
                 (total, foodDetail) => total + foodDetail.time,
                 0
@@ -84,15 +79,10 @@ const Recipes = ({ navigation, token, setLogin }) => {
                       contentContainerStyle={{ flexDirection: "row" }}
                     >
                       {dateRecipe.food.map((foodDetail, index) => {
-                        // const imgPath = foodDetail.imagePath.slice(0, -4);
                         const imgPath = foodDetail.imagePath;
 
                         return (
-                          <View
-                            style={styles.recipeContainer}
-                            // key={foodDetail.id}
-                            key={index}
-                          >
+                          <View style={styles.recipeContainer} key={index}>
                             <Image
                               style={styles.recipeImg}
                               source={{ uri: imgPath }}
@@ -133,6 +123,7 @@ const styles = StyleSheet.create({
   header__top: {
     marginBottom: 10,
     fontSize: 20,
+    flexDirection: "row",
   },
   recipes__days: {
     borderWidth: 1,
@@ -141,7 +132,6 @@ const styles = StyleSheet.create({
   recipeContainer: {
     width: 150,
     marginRight: 8,
-    // borderWidth: 1,
   },
   header__days: {
     fontSize: 20,

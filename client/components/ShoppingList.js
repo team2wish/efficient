@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
 import Checkbox from "expo-checkbox";
 import { useNavigation } from "@react-navigation/native";
 
-const ShoppingListScreen = ({ token }) => {
+const ShoppingListScreen = ({ route }) => {
   const [shoppingList, setShoppingList] = useState();
   const [isChecked, setIsChecked] = useState({});
   const useNavigate = useNavigation();
+  const token = route.params.token;
 
   const getShoppingList = async () => {
     try {
@@ -19,7 +20,7 @@ const ShoppingListScreen = ({ token }) => {
       }
     } catch (e) {
       Alert.alert("セッションが切れました\n再度ログインしてください");
-      useNavigate.navigate("Login");
+      useNavigate.navigate("ログイン");
       console.error("Recipes", e);
     }
   };
@@ -52,7 +53,6 @@ const ShoppingListScreen = ({ token }) => {
         <ScrollView>
           {shoppingList &&
             shoppingList.map((dateRecipe, dateIndex) => {
-              // console.log("daterecipe2", recipesData);
               return (
                 <View key={dateIndex}>
                   <Text

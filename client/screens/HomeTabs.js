@@ -15,13 +15,13 @@ const HomeTabs = ({ route }) => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="献立">
-        {() => <RecipesScreen token={route.params} />}
+        {() => <RecipesScreen route={route} />}
       </Tab.Screen>
       <Tab.Screen name="買い物">
-        {() => <ShoppingListScreen token={route.params} />}
+        {() => <ShoppingListScreen route={route} />}
       </Tab.Screen>
       <Tab.Screen name="料理">
-        {() => <CookProcessScreen token={route.params} />}
+        {() => <CookProcessScreen route={route} />}
       </Tab.Screen>
     </Tab.Navigator>
   );
