@@ -7,24 +7,35 @@ const recipesApi = {
         authorization: `Berer ${token}`,
       },
     }),
+
   getCooking: (token) =>
     axiosClient.get("/api/v1/cooking", {
       headers: {
         authorization: `Berer ${token}`,
       },
     }),
+
   changeMainRecipes: (token) =>
     axiosClient.get("/api/v1/recipes/search/isMain", {
       headers: {
         authorization: `Berer ${token}`,
       },
     }),
+
+  postRecipes: (date, beforeId, afterId, token) =>
+    axiosClient.put(`/api/v1/recipes/${date}/${beforeId}/${afterId}`, null, {
+      headers: {
+        authorization: `Berer ${token}`,
+      },
+    }),
+
   changeSideRecipes: (token) =>
     axiosClient.get("/api/v1/recipes/search/isSide", {
       headers: {
         authorization: `Berer ${token}`,
       },
     }),
+
   changeSoupRecipes: (token) =>
     axiosClient.get("/api/v1/recipes/search/isSoup", {
       headers: {

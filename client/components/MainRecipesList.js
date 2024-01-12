@@ -1,39 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, Image, StyleSheet, FlatList } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import {
+  View,
+  Text,
+  Button,
+  Image,
+  StyleSheet,
+  FlatList,
+  Alert,
+} from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
-import axios from "axios";
 
 const MainRecipesList = ({ navigation, route }) => {
   const [Recipes, setRecipes] = useState();
-  // console.log("mainrecipes", route.params);
-
   const anotherRecipes = async () => {
-    const res = await recipesApi.changeMainRecipes();
-    // console.log("data", res.data);
-    if (res.data) {
-      setRecipes(res.data);
+    try {
+      const token = route.params[2];
+      const res = await recipesApi.changeMainRecipes(token);
+      if (res.data) {
+        setRecipes(res.data);
+      }
+    } catch (e) {
+      Alert.alert("セッションが切れました\n再度ログインしてください");
+      navigation.navigate("ログイン");
+      console.error("MainRecipe", e);
     }
   };
 
-  const url = "http://localhost:3000/api/v1/recipes";
-
-  const changeRecipes = (afterId) => {
-    // console.log(`${url}/${route.params[0]}/${route.params[1]}/${afterId}`);
-    // console.log("mainRecipeをpost", route.params[0], route.params[1], afterId);
-    const postChangeMainRecipes = async () => {
-      const res = await axios.put(
-        `${url}/${route.params[0]}/${route.params[1]}/${afterId}`,
-        { date: route.params[0], beforeId: route.params[1], afterId: afterId }
-      );
-      // console.log("data", res.data);
+  const changeRecipes = async (afterId) => {
+    try {
+      const date = route.params[0];
+      const beforeId = route.params[1];
+      const token = route.params[2];
+      const res = await recipesApi.postRecipes(date, beforeId, afterId, token);
       if (res.data) {
-        console.log("post後-------", res.data);
-        navigation.navigate("Home");
+        navigation.navigate("Home", { token: token, update: true });
       }
-    };
-    postChangeMainRecipes();
+    } catch (e) {
+      Alert.alert("セッションが切れました\n再度ログインしてください");
+      navigation.navigate("ログイン");
+      console.error("changeMainRecipe", e);
+    }
   };
 
   useEffect(() => {

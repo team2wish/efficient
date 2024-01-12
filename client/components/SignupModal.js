@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button, TextInput } from "react-native";
+import { StyleSheet, View, Text, Button, TextInput, Alert } from "react-native";
 import Checkbox from "expo-checkbox";
+import authApi from "../api/authApi";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const SignupModal = ({ navigation }) => {
+const SignupModal = ({ navigation, route }) => {
   const [adultcount, setAdultcount] = useState(0);
   const [childrencount, setChildrencount] = useState(0);
   const [shrimpChecked, setShrimpChecked] = useState(false);
@@ -35,15 +37,56 @@ const SignupModal = ({ navigation }) => {
     }
   };
 
+  const signupPost = async () => {
+    if (typeof route.params !== "undefined") {
+      const name = route.params[0];
+      const mailaddress = route.params[1];
+      const password = route.params[2];
+      const data = {
+        userName: name,
+        mail: mailaddress,
+        password: password,
+        numOfAdults: adultcount,
+        numOfChildren: childrencount,
+        shrimp: shrimpChecked,
+        crab: crabChecked,
+        wheat: wheatChecked,
+        buckwheat_noodles: buckwheat_noodlesChecked,
+        egg: eggChecked,
+        milk: milkChecked,
+        peanut: peanutChecked,
+      };
+      const res = await authApi.signUp(data);
+      const fetchlogin = await authApi.login(name, password);
+      const token = fetchlogin.data.token;
+      await storeData(token);
+      navigation.navigate("Signup");
+      navigation.navigate("Home", { token: token, update: false });
+    } else {
+      Alert.alert("アレルギーを入力して下さい");
+    }
+  };
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem("my-key", value);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text>SignupModal</Text>
-      <Text>大人 {adultcount}名</Text>
-      <Button title="ー" onPress={adultcountSub} />
-      <Button title="＋" onPress={adultcountAdd} />
-      <Text>子供 {childrencount}名</Text>
-      <Button title="ー" onPress={childrencountSub} />
-      <Button title="＋" onPress={childrencountAdd} />
+      <View style={styles.container__adult}>
+        <Text style={styles.adult}>大人 {adultcount}名</Text>
+        <Button title="ー" onPress={adultcountSub} />
+        <Button title="＋" onPress={adultcountAdd} />
+      </View>
+      <View style={styles.container__chiliren}>
+        <Text>子供 {childrencount}名</Text>
+        <Button title="ー" onPress={childrencountSub} />
+        <Button title="＋" onPress={childrencountAdd} />
+      </View>
       <View style={styles.checkboxContainer}>
         <Text>えびアレルギー</Text>
         <Checkbox
@@ -102,30 +145,32 @@ const SignupModal = ({ navigation }) => {
       </View>
       <Button
         styles={styles.button}
-        title="新規登録画面へ戻る"
-        onPress={() => {
-          navigation.navigate("Signup", [
-            adultcount,
-            childrencount,
-            shrimpChecked,
-            crabChecked,
-            wheatChecked,
-            buckwheat_noodlesChecked,
-            eggChecked,
-            milkChecked,
-            peanutChecked,
-          ]);
-        }}
+        // title="新規登録画面へ戻る"
+        title="新規登録"
+        onPress={signupPost}
       />
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
+  },
+  container__adult: {
+    flexDirection: "row",
+    justifyContent: "center", // 中央揃え
+    alignItems: "center", // 中央揃え
+  },
+  adult: {
+    textAlign: "center",
+  },
+  container__chiliren: {
+    flexDirection: "row",
+    justifyContent: "center", // 中央揃え
+    alignItems: "center", // 中央揃え
+    marginBottom: 20,
   },
   button: {
     // flex: 1,
@@ -135,10 +180,11 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 10,
   },
   checkbox: {
-    alignSelf: "center",
+    // alignSelf: "center",
+    // marginBottom: 10,
   },
 });
-
 export default SignupModal;
