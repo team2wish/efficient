@@ -547,6 +547,12 @@ const authTokenServer = (app) => {
     res.render("pages/error");
   });
 
+  // test用
+  app.get("/", (req, res) => {
+    res.status(200);
+    res.send("connect");
+  });
+
   return app;
 };
 
