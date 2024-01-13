@@ -21,7 +21,7 @@ const Signup = ({ navigation }) => {
     if (name === "" || mailAddress === "" || password === "") {
       Alert.alert("ユーザー情報を入力してください");
     } else {
-      navigation.navigate("SignupModal", [name, mailAddress, password]);
+      navigation.navigate("初期設定", [name, mailAddress, password]);
     }
   };
 

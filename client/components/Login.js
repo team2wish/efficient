@@ -75,7 +75,6 @@ const Login = ({ navigation }) => {
       {login && (
         <>
           <View style={styles.container}>
-            <Text style={styles.title}>ログイン画面</Text>
             <TextInput
               style={styles.mailAddresInput}
               value={username}
@@ -94,7 +93,7 @@ const Login = ({ navigation }) => {
             <Button
               styles={styles.button}
               title="アカウント新規作成"
-              onPress={() => navigation.navigate("Signup")}
+              onPress={() => navigation.navigate("新規登録")}
             />
           </View>
         </>

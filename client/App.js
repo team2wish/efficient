@@ -15,7 +15,6 @@ import SoupRecipesListScreen from "./screens/SoupRecipesListScreen";
 import { StyleSheet } from "react-native";
 
 const Stack = createNativeStackNavigator();
-
 export default function App() {
   return (
     <NavigationContainer initialRouteName="User">
@@ -37,29 +36,65 @@ export default function App() {
           component={HomeTabs}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Signup" component={SignupScreen} />
+        <Stack.Screen name="新規登録" component={SignupScreen} />
         <Stack.Screen
-          name="SignupModal"
+          name="初期設定"
           component={SignupModalScreen}
           options={{
             presentation: "modal",
           }}
         />
         <Stack.Screen
-          name="MainRecipesList"
+          name="主菜リスト"
           component={MainRecipesListScreen}
+          options={{
+            headerStyle: {
+              shadowColor: "transparent",
+            },
+            headerTintColor: "#002F15",
+            headerTitleStyle: {
+              fontSize: 20,
+            },
+          }}
         />
         <Stack.Screen
-          name="SideRecipesList"
+          name="副菜リスト"
           component={SideRecipesListScreen}
+          options={{
+            headerStyle: {
+              shadowColor: "transparent",
+            },
+            headerTintColor: "#002F15",
+            headerTitleStyle: {
+              fontSize: 20,
+            },
+          }}
         />
         <Stack.Screen
-          name="SoupRecipesList"
+          name="汁物リスト"
           component={SoupRecipesListScreen}
+          options={{
+            headerStyle: {
+              shadowColor: "transparent",
+            },
+            headerTintColor: "#002F15",
+            headerTitleStyle: {
+              fontSize: 20,
+            },
+          }}
         />
         <Stack.Screen
-          name="RiceRecipesList"
+          name="主食リスト"
           component={RiceRecipesListScreen}
+          options={{
+            headerStyle: {
+              shadowColor: "transparent",
+            },
+            headerTintColor: "#002F15",
+            headerTitleStyle: {
+              fontSize: 20,
+            },
+          }}
         />
         <Stack.Screen name="User" component={UserScreen} />
         <Stack.Screen name="Setting" component={SettingScreen} />

@@ -48,7 +48,6 @@ const ShoppingListScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header__top}>買い物リスト</Text>
       <GestureHandlerRootView>
         <ScrollView>
           {shoppingList &&

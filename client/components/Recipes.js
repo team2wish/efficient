@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, Image, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  Image,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import recipesApi from "../api/recipesApi";
@@ -37,13 +45,13 @@ const Recipes = ({ route }) => {
 
   const changeRecipes = (beforeId, date, category) => {
     if (category === "isMain") {
-      useNavigate.navigate("MainRecipesList", [date, beforeId, token]);
+      useNavigate.navigate("主菜リスト", [date, beforeId, token]);
     } else if (category === "isSide") {
-      useNavigate.navigate("SideRecipesList", [date, beforeId, token]);
+      useNavigate.navigate("副菜リスト", [date, beforeId, token]);
     } else if (category === "isSoup") {
-      useNavigate.navigate("SoupRecipesList", [date, beforeId, token]);
+      useNavigate.navigate("汁物リスト", [date, beforeId, token]);
     } else {
-      useNavigate.navigate("RiceRecipesList", [date, beforeId, token]);
+      useNavigate.navigate("主食リスト", [date, beforeId, token]);
     }
   };
 
@@ -51,11 +59,15 @@ const Recipes = ({ route }) => {
     <View style={styles.container}>
       {fiveRecipes && (
         <View style={styles.header__top}>
-          <Text>{`${fiveRecipes[0].date.slice(5)}`}</Text>
-          <Text>月</Text>
-          <Text> 〜 </Text>
-          <Text>{`${fiveRecipes[4].date.slice(5)}`}</Text>
-          <Text>金</Text>
+          <Text style={styles.header__days}>{`${fiveRecipes[0].date.slice(
+            5
+          )}`}</Text>
+          <Text style={styles.header__days_color}>(月)</Text>
+          <Text style={styles.header__days_color}> 〜 </Text>
+          <Text style={styles.header__days}>{`${fiveRecipes[4].date.slice(
+            5
+          )}`}</Text>
+          <Text style={styles.header__days_color}>(金)</Text>
         </View>
       )}
 
@@ -68,11 +80,21 @@ const Recipes = ({ route }) => {
                 0
               );
               return (
-                <View key={dateRecipe.id} style={styles.recipes__days}>
-                  <Text style={styles.header__days}>
-                    {dateRecipe.date.slice(5)} {Math.floor(totalCookTime * 0.7)}
-                    分以内
-                  </Text>
+                <View key={dateRecipe.id} style={styles.recipes_container}>
+                  <View style={styles.recipes__days_container}>
+                    <Text style={styles.recipes__days}>
+                      {dateRecipe.date.slice(5)}{" "}
+                    </Text>
+                    <View style={styles.timer}>
+                      <Image
+                        source={require("../assets/timerIcon.png")}
+                        style={styles.timerIcon}
+                      />
+                      <Text style={styles.recipes__days}>
+                        {Math.floor(totalCookTime * 0.7)}分
+                      </Text>
+                    </View>
+                  </View>
                   <GestureHandlerRootView>
                     <ScrollView
                       horizontal={true}
@@ -80,20 +102,59 @@ const Recipes = ({ route }) => {
                     >
                       {dateRecipe.food.map((foodDetail, index) => {
                         const imgPath = foodDetail.imagePath;
-
                         return (
-                          <View style={styles.recipeContainer} key={index}>
+                          <View
+                            style={
+                              (foodDetail.category === "isMain" &&
+                                styles.isFirst) ||
+                              (foodDetail.category === "isSide" &&
+                                styles.isSecond) ||
+                              (foodDetail.category === "isSoup" &&
+                                styles.isThird) ||
+                              (foodDetail.category === "isRice" &&
+                                styles.isThird)
+                            }
+                            key={index}
+                          >
                             <Image
                               style={styles.recipeImg}
                               source={{ uri: imgPath }}
                             />
-                            <Text>{foodDetail.time}分</Text>
-                            <Text numberOfLines={1} ellipsizeMode="tail">
-                              {foodDetail.name}
-                            </Text>
-                            <Button
-                              title="変更"
-                              color="red"
+                            <View
+                              style={[
+                                styles.category_title_container,
+                                (foodDetail.category === "isMain" &&
+                                  styles.isMain) ||
+                                  (foodDetail.category === "isSide" &&
+                                    styles.isSide) ||
+                                  (foodDetail.category === "isSoup" &&
+                                    styles.isSoup) ||
+                                  (foodDetail.category === "isRice" &&
+                                    styles.isRice),
+                              ]}
+                            >
+                              <Text
+                                style={[
+                                  styles.category_title,
+                                  (foodDetail.category === "isMain" &&
+                                    styles.isMain) ||
+                                    (foodDetail.category === "isSide" &&
+                                      styles.isSide) ||
+                                    (foodDetail.category === "isSoup" &&
+                                      styles.isSoup) ||
+                                    (foodDetail.category === "isRice" &&
+                                      styles.isRice),
+                                ]}
+                              >
+                                {(foodDetail.category === "isMain" && "主菜") ||
+                                  (foodDetail.category === "isSide" &&
+                                    "副菜") ||
+                                  (foodDetail.category === "isSoup" &&
+                                    "汁物") ||
+                                  (foodDetail.category === "isRice" && "主食")}
+                              </Text>
+                            </View>
+                            <TouchableOpacity
                               onPress={() =>
                                 changeRecipes(
                                   foodDetail.id,
@@ -101,7 +162,22 @@ const Recipes = ({ route }) => {
                                   foodDetail.category
                                 )
                               }
-                            />
+                              style={styles.recipes__update_button}
+                            >
+                              <Image
+                                style={styles.recipes__update_image}
+                                source={require("../assets/updateIcon.png")}
+                              />
+                            </TouchableOpacity>
+                            <View style={styles.recipe_title_container}>
+                              <Text
+                                numberOfLines={1}
+                                ellipsizeMode="tail"
+                                style={styles.recipe_title}
+                              >
+                                {foodDetail.name}
+                              </Text>
+                            </View>
                           </View>
                         );
                       })}
@@ -118,29 +194,118 @@ const Recipes = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F7F6EC",
+    paddingBottom: 120,
+    backgroundColor: "white",
   },
   header__top: {
-    marginBottom: 10,
-    fontSize: 20,
+    marginBottom: 20,
     flexDirection: "row",
-  },
-  recipes__days: {
-    borderWidth: 1,
-    borderColor: "#cbd5e0",
-  },
-  recipeContainer: {
-    width: 150,
-    marginRight: 8,
+    justifyContent: "center",
+    alignItems: "baseline",
   },
   header__days: {
     fontSize: 20,
+    color: "#002F15",
+  },
+  header__days_color: {
+    color: "#002F15",
+  },
+  recipes_container: {
+    backgroundColor: "#FBFBF6",
+    marginBottom: 10,
+    flexWrap: "wrap",
+    paddingBottom: 10,
+  },
+  recipes__days_container: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 8,
+  },
+  recipes__days: {
+    fontSize: 16,
+    color: "#002F15",
+  },
+  recipes__update_button: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+  },
+  recipes__update_image: {
+    width: 24,
+    height: 24,
+  },
+  timer: {
+    width: 60,
+    flexDirection: "row",
+  },
+  timerIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 6,
   },
   recipeImg: {
-    width: 150,
-    height: 150,
+    flex: 1,
+    borderRadius: 10,
+  },
+  recipe_title_container: {
+    position: "absolute",
+    right: 0,
+    left: 0,
+    bottom: 0,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  recipe_title: {
+    textAlign: "center",
+    color: "#F3F3F3",
+    fontWeight: "bold",
+  },
+  isFirst: {
+    width: 180,
+    height: 180,
     borderRadius: 10,
     marginLeft: 10,
+  },
+  isSecond: {
+    width: 180,
+    height: 80,
+    borderRadius: 10,
+    marginLeft: 10,
+  },
+  isThird: {
+    position: "absolute",
+    top: 100,
+    right: 0,
+    width: 180,
+    height: 80,
+    borderRadius: 10,
+    marginLeft: 10,
+  },
+
+  category_title_container: {
+    position: "absolute",
+    top: 5,
+    left: 5,
+    padding: 4,
+    paddingLeft: 20,
+    paddingRight: 20,
+    borderRadius: 14,
+  },
+  category_title: {
+    color: "#F3F3F3",
+    fontSize: 16,
+  },
+  isMain: {
+    backgroundColor: "#DC7C46",
+  },
+  isSide: {
+    backgroundColor: "#3AB130",
+  },
+  isSoup: {
+    backgroundColor: "#7C6142",
+  },
+  isRice: {
+    backgroundColor: "#DBB85F",
   },
 });
 
