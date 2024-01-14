@@ -59,12 +59,12 @@ const Recipes = ({ route }) => {
     <View style={styles.container}>
       {fiveRecipes && (
         <View style={styles.header__top}>
-          <Text style={styles.header__days}>{`${fiveRecipes[0].date.slice(
+          <Text style={styles.header__date}>{`${fiveRecipes[0].date.slice(
             5
           )}`}</Text>
           <Text style={styles.header__days_color}>(月)</Text>
           <Text style={styles.header__days_color}> 〜 </Text>
-          <Text style={styles.header__days}>{`${fiveRecipes[4].date.slice(
+          <Text style={styles.header__date}>{`${fiveRecipes[4].date.slice(
             5
           )}`}</Text>
           <Text style={styles.header__days_color}>(金)</Text>
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "baseline",
   },
-  header__days: {
+  header__date: {
     fontSize: 20,
     color: "#002F15",
   },

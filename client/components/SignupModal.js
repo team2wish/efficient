@@ -60,7 +60,7 @@ const SignupModal = ({ navigation, route }) => {
       const fetchlogin = await authApi.login(name, password);
       const token = fetchlogin.data.token;
       await storeData(token);
-      navigation.navigate("Signup");
+      navigation.navigate("新規登録");
       navigation.navigate("Home", { token: token, update: false });
     } else {
       Alert.alert("アレルギーを入力して下さい");
