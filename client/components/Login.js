@@ -68,36 +68,36 @@ const Login = ({ navigation }) => {
 
   return (
     <>
-      {login && (
-        <>
-          <View style={styles.container}>
-            <Image
-              source={require("../assets/kuma.png")}
-              style={styles.icon_image}
-            />
-            <TextInput
-              style={styles.input_username}
-              value={username}
-              placeholder="ユーザー名"
-              onChangeText={onChangeUsername}
-            ></TextInput>
-            <TextInput
-              style={styles.input_password}
-              value={password}
-              placeholder="パスワード"
-              onChangeText={onChangePassword}
-            ></TextInput>
-            <TouchableOpacity style={styles.button} onPress={loginFn}>
-              <Text style={styles.button_text}>ログイン</Text>
-            </TouchableOpacity>
-            <Button
-              styles={styles.button}
-              title="アカウント新規作成"
-              onPress={() => navigation.navigate("新規登録")}
-            />
-          </View>
-        </>
-      )}
+      {/* {login && ( */}
+      <>
+        <View style={styles.container}>
+          <Image
+            source={require("../assets/kuma.png")}
+            style={styles.icon_image}
+          />
+          <TextInput
+            style={styles.input_username}
+            value={username}
+            placeholder="ユーザー名"
+            onChangeText={onChangeUsername}
+          ></TextInput>
+          <TextInput
+            style={styles.input_password}
+            value={password}
+            placeholder="パスワード"
+            onChangeText={onChangePassword}
+          ></TextInput>
+          <TouchableOpacity style={styles.button} onPress={loginFn}>
+            <Text style={styles.button_text}>ログイン</Text>
+          </TouchableOpacity>
+          <Button
+            styles={styles.button}
+            title="アカウント新規作成"
+            onPress={() => navigation.navigate("新規登録")}
+          />
+        </View>
+      </>
+      {/*  )} */}
     </>
   );
 };
