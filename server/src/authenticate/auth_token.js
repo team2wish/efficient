@@ -236,7 +236,7 @@ const authTokenServer = (app) => {
       const lastFoodIdArr = [3, 10, 12];
       for (date in menu) {
         dayCount++;
-        if (dayCount < 5) {
+        if (dayCount !== 1) {
           for (foodId of menu[date]) {
             countId++;
             await knex("menus").insert([
