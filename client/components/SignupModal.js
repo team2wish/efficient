@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button, TextInput, Alert } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  TextInput,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import Checkbox from "expo-checkbox";
 import authApi from "../api/authApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -60,7 +68,7 @@ const SignupModal = ({ navigation, route }) => {
       const fetchlogin = await authApi.login(name, password);
       const token = fetchlogin.data.token;
       await storeData(token);
-      navigation.navigate("Signup");
+      navigation.navigate("新規登録");
       navigation.navigate("Home", { token: token, update: false });
     } else {
       Alert.alert("アレルギーを入力して下さい");
@@ -75,116 +83,170 @@ const SignupModal = ({ navigation, route }) => {
     }
   };
 
+  const allergyTitle = ["えび", "かに", "小麦", "蕎麦", "卵", "落花生"];
   return (
     <View style={styles.container}>
-      <View style={styles.container__adult}>
-        <Text style={styles.adult}>大人 {adultcount}名</Text>
-        <Button title="ー" onPress={adultcountSub} />
-        <Button title="＋" onPress={adultcountAdd} />
+      <View
+        style={[
+          styles.number_people_container,
+          styles.number_people_container_adult,
+        ]}
+      >
+        <Text style={[styles.number_text, styles.number_title]}>大人</Text>
+        <View style={styles.number_people}>
+          <Text style={styles.number_text}> {adultcount}名</Text>
+          <TouchableOpacity
+            style={[styles.button, styles.button_left]}
+            onPress={adultcountSub}
+          >
+            <Text style={styles.button_text}>-</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.button_right]}
+            onPress={adultcountAdd}
+          >
+            <Text style={styles.button_text}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.container__chiliren}>
-        <Text>子供 {childrencount}名</Text>
-        <Button title="ー" onPress={childrencountSub} />
-        <Button title="＋" onPress={childrencountAdd} />
+      <View style={styles.number_people_container}>
+        <Text style={[styles.number_text, styles.number_title]}>こども</Text>
+        <View style={styles.number_people}>
+          <Text style={styles.number_text}> {childrencount}名</Text>
+          <TouchableOpacity
+            style={[styles.button, styles.button_left]}
+            onPress={childrencountSub}
+          >
+            <Text style={styles.button_text}>-</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.button_right]}
+            onPress={childrencountAdd}
+          >
+            <Text style={styles.button_text}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.checkboxContainer}>
-        <Text>えびアレルギー</Text>
-        <Checkbox
-          style={styles.checkbox}
-          value={shrimpChecked}
-          onValueChange={setShrimpChecked}
-        />
-      </View>
-      <View style={styles.checkboxContainer}>
-        <Text>かにアレルギー</Text>
-        <Checkbox
-          style={styles.checkbox}
-          value={crabChecked}
-          onValueChange={setCrabChecked}
-        />
-      </View>
-      <View style={styles.checkboxContainer}>
-        <Text>小麦アレルギー</Text>
-        <Checkbox
-          style={styles.checkbox}
-          value={wheatChecked}
-          onValueChange={setWheatChecked}
-        />
-      </View>
-      <View style={styles.checkboxContainer}>
-        <Text>蕎麦アレルギー</Text>
-        <Checkbox
-          style={styles.checkbox}
-          value={buckwheat_noodlesChecked}
-          onValueChange={setBuckwheat_noodlesChecked}
-        />
-      </View>
-      <View style={styles.checkboxContainer}>
-        <Text>卵アレルギー</Text>
-        <Checkbox
-          style={styles.checkbox}
-          value={eggChecked}
-          onValueChange={setEggChecked}
-        />
-      </View>
-      <View style={styles.checkboxContainer}>
-        <Text>乳アレルギー</Text>
-        <Checkbox
-          style={styles.checkbox}
-          value={milkChecked}
-          onValueChange={setMilkChecked}
-        />
-      </View>
-      <View style={styles.checkboxContainer}>
-        <Text>落花生アレルギー</Text>
-        <Checkbox
-          style={styles.checkbox}
-          value={peanutChecked}
-          onValueChange={setPeanutChecked}
-        />
-      </View>
-      <Button
+      <Text style={styles.allergy_title}>アレルギー食材</Text>
+      {allergyTitle.map((item) => {
+        return (
+          <View style={styles.checkboxContainer}>
+            <Text style={styles.checkbox_title}>{item}</Text>
+            <Checkbox
+              style={styles.checkbox}
+              value={shrimpChecked}
+              onValueChange={setShrimpChecked}
+            />
+          </View>
+        );
+      })}
+      <TouchableOpacity style={styles.signup_button} onPress={childrencountAdd}>
+        <Text style={styles.signup_text}>新規登録</Text>
+      </TouchableOpacity>
+      {/* <Button
         styles={styles.button}
         // title="新規登録画面へ戻る"
         title="新規登録"
         onPress={signupPost}
-      />
+      /> */}
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    backgroundColor: "#fff",
+    flex: 1,
+    backgroundColor: "#F8F7EE",
     alignItems: "center",
   },
-  container__adult: {
+  number_people_container: {
     flexDirection: "row",
-    justifyContent: "center", // 中央揃え
-    alignItems: "center", // 中央揃え
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
   },
-  adult: {
+  number_people_container_adult: {
+    marginTop: 60,
+  },
+  number_text: {
     textAlign: "center",
+    fontSize: 18,
   },
+  number_title: {
+    width: 60,
+    marginRight: 40,
+  },
+  number_people: {
+    flexDirection: "row",
+    alignItems: "center",
+    textAlign: "center",
+    fontSize: 18,
+  },
+
   container__chiliren: {
     flexDirection: "row",
-    justifyContent: "center", // 中央揃え
-    alignItems: "center", // 中央揃え
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 20,
   },
   button: {
-    // flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
   },
   checkboxContainer: {
+    width: 300,
+    padding: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: "#D3D3D3",
+  },
+  checkbox_title: {
+    fontSize: 16,
   },
   checkbox: {
-    // alignSelf: "center",
-    // marginBottom: 10,
+    borderColor: "#D3D3D3",
+    borderRadius: 10,
+  },
+  button: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: "#DFDFDF",
+  },
+  button_left: {
+    marginLeft: 10,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderRightWidth: 2,
+    borderRightColor: "#D3D3D3",
+  },
+  button_right: {
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  button_text: {
+    color: "#808080",
+    fontSize: 30,
+  },
+  allergy_title: {
+    marginTop: 40,
+    marginBottom: 30,
+    fontSize: 20,
+  },
+  signup_button: {
+    marginTop: 30,
+    padding: 10,
+    paddingLeft: 50,
+    paddingRight: 50,
+    borderRadius: 20,
+    backgroundColor: "#DC661F",
+  },
+  signup_text: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
 export default SignupModal;
