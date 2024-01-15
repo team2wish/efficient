@@ -36,19 +36,20 @@ const ShoppingListScreen = ({ route }) => {
   const getStyle = (value) => {
     switch (value) {
       case "野菜":
-        return styles.style1;
+        return styles.vegetable;
       case "豆腐":
-        return styles.style2;
+        return styles.tofu;
       case "肉":
-        return styles.style3;
+        return styles.meet;
+      case "魚":
+        return styles.fish;
       default:
-        return styles.style4;
+        return styles.other;
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header__top}>買い物リスト</Text>
       <GestureHandlerRootView>
         <ScrollView>
           {shoppingList &&
@@ -65,11 +66,10 @@ const ShoppingListScreen = ({ route }) => {
                   </Text>
 
                   {dateRecipe.items.map((foodDetail, itemIndex) => {
-                    // const imgPath = foodDetail.imagePath.slice(0, -4);
                     const id = `${dateIndex}-${itemIndex}`;
                     return (
-                      <View style={styles.recipeContainer} key={id}>
-                        <View style={styles.checkboxContainer}>
+                      <View style={styles.ingredients_container} key={id}>
+                        <View style={styles.ingredients}>
                           <Checkbox
                             style={styles.checkbox}
                             value={isChecked[id] || false}
@@ -77,9 +77,12 @@ const ShoppingListScreen = ({ route }) => {
                               handleValueChange(id, value)
                             }
                           />
-                          <Text>{foodDetail.ingredient_name}</Text>
+                          <Text style={styles.ingredient_name}>
+                            {foodDetail.ingredient_name}
+                          </Text>
                         </View>
-                        <Text style={styles.recipeContainer__right}>
+                        {/* </View> */}
+                        <Text style={styles.ingredients__right}>
                           {foodDetail.total_quantity}
                           {foodDetail.unit}
                         </Text>
@@ -105,42 +108,62 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   store_section: {
-    borderWidth: 1,
-    borderColor: "#cbd5e0",
+    padding: 10,
+    marginBottom: 24,
+    marginTop: 24,
   },
-  style1: {
-    fontSize: 20,
-    backgroundColor: "green",
-    marginBottom: 10,
+  vegetable: {
+    fontSize: 24,
+    backgroundColor: "#A4E78C",
   },
-  style2: {
-    fontSize: 20,
+  tofu: {
+    fontSize: 24,
     backgroundColor: "white",
-    marginBottom: 10,
   },
-  style3: {
-    fontSize: 20,
-    backgroundColor: "orange",
-    marginBottom: 10,
+  meet: {
+    fontSize: 24,
+    backgroundColor: "#FED6B2",
   },
-  style4: {
-    fontSize: 20,
+  fish: {
+    fontSize: 24,
+    backgroundColor: "#B2B9FE",
+  },
+  other: {
+    fontSize: 24,
     backgroundColor: "pink",
-    marginBottom: 10,
   },
-  recipeContainer: {
-    width: 370,
-    marginRight: 8,
-    // borderWidth: 1,
+  ingredients_container: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    borderBottomWidth: 2,
+    borderBottomColor: "#D3D3D3",
+  },
+  ingredient_name: {
+    fontSize: 20,
+  },
+  ingredients: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  ingredients__right: {
+    color: "#DC661F",
+    textAlign: "right",
+    fontSize: 18,
   },
   checkboxContainer: {
     width: 300,
     flexDirection: "row",
     alignItems: "center",
   },
-  recipeContainer__right: {
-    color: "red",
-    textAlign: "right",
+  checkbox: {
+    width: 16,
+    height: 16,
+    marginRight: 10,
   },
 });
 
