@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Button, TextInput, Alert } from "react-native";
-import authApi from "../api/authApi";
+import React, { useState } from "react";
+import { StyleSheet, View, Button, TextInput, Alert } from "react-native";
 
 const Signup = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -17,15 +16,12 @@ const Signup = ({ navigation }) => {
     setPassword(value);
   };
 
-  // const showSignupModal = () => {
-  //   if (name === "" || mailAddress === "" || password === "") {
-  //     Alert.alert("ユーザー情報を入力してください");
-  //   } else {
-  //     navigation.navigate("初期設定", [name, mailAddress, password]);
-  //   }
-  // };
   const showSignupModal = () => {
-    navigation.navigate("初期設定", [name, mailAddress, password]);
+    if (name === "" || mailAddress === "" || password === "") {
+      Alert.alert("ユーザー情報を入力してください");
+    } else {
+      navigation.navigate("初期設定", [name, mailAddress, password]);
+    }
   };
 
   return (
