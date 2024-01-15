@@ -12,101 +12,64 @@ import SideRecipesListScreen from "./screens/SideRecipesListScreen";
 import SignupModalScreen from "./screens/SignupModalScreen";
 import RiceRecipesListScreen from "./screens/RiceRecipesListScreen";
 import SoupRecipesListScreen from "./screens/SoupRecipesListScreen";
-import { StyleSheet } from "react-native";
+import { LogBox } from "react-native";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
+  LogBox.ignoreAllLogs();
   return (
     <NavigationContainer initialRouteName="User">
-      {/* スタック遷移 */}
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
-            backgroundColor: styles.container.backgroundColor,
+            backgroundColor: "#F8F7EE",
           },
+          headerTintColor: "#002F15",
           headerTitleStyle: {
-            fontFamily: "ヒラギノ角ゴ ProN W3",
             fontSize: 20,
           },
         }}
       >
-        <Stack.Screen name="ログイン" component={LoginScreen} />
+        <Stack.Screen
+          name="ログイン"
+          component={LoginScreen}
+          options={{
+            headerShadowVisible: false,
+          }}
+        />
         <Stack.Screen
           name="Home"
           component={HomeTabs}
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+            headerShadowVisible: false,
+            headerStyle: {
+              backgroundColor: "white",
+            },
+          }}
         />
-        <Stack.Screen name="新規登録" component={SignupScreen} />
+        <Stack.Screen
+          name="新規登録"
+          component={SignupScreen}
+          options={{
+            headerShadowVisible: false,
+          }}
+        />
         <Stack.Screen
           name="初期設定"
           component={SignupModalScreen}
           options={{
             presentation: "modal",
+            headerShadowVisible: false,
           }}
         />
-        <Stack.Screen
-          name="主菜リスト"
-          component={MainRecipesListScreen}
-          options={{
-            headerStyle: {
-              shadowColor: "transparent",
-            },
-            headerTintColor: "#002F15",
-            headerTitleStyle: {
-              fontSize: 20,
-            },
-          }}
-        />
-        <Stack.Screen
-          name="副菜リスト"
-          component={SideRecipesListScreen}
-          options={{
-            headerStyle: {
-              shadowColor: "transparent",
-            },
-            headerTintColor: "#002F15",
-            headerTitleStyle: {
-              fontSize: 20,
-            },
-          }}
-        />
-        <Stack.Screen
-          name="汁物リスト"
-          component={SoupRecipesListScreen}
-          options={{
-            headerStyle: {
-              shadowColor: "transparent",
-            },
-            headerTintColor: "#002F15",
-            headerTitleStyle: {
-              fontSize: 20,
-            },
-          }}
-        />
-        <Stack.Screen
-          name="主食リスト"
-          component={RiceRecipesListScreen}
-          options={{
-            headerStyle: {
-              shadowColor: "transparent",
-            },
-            headerTintColor: "#002F15",
-            headerTitleStyle: {
-              fontSize: 20,
-            },
-          }}
-        />
+        <Stack.Screen name="主菜リスト" component={MainRecipesListScreen} />
+        <Stack.Screen name="副菜リスト" component={SideRecipesListScreen} />
+        <Stack.Screen name="汁物リスト" component={SoupRecipesListScreen} />
+        <Stack.Screen name="主食リスト" component={RiceRecipesListScreen} />
         <Stack.Screen name="User" component={UserScreen} />
         <Stack.Screen name="Setting" component={SettingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#F8F7EE",
-
-    // backgroundColor: "red",
-  },
-});

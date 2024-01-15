@@ -259,6 +259,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#F3F3F3",
     fontWeight: "bold",
+    fontSize: 18,
   },
   isFirst: {
     width: 180,

@@ -127,7 +127,9 @@ const CookProcess = ({ route }) => {
                 source={require("../assets/timerIcon.png")}
                 style={styles.timerIcon}
               />
-              <Text style={styles.timer_text}>5:00</Text>
+              <Text style={styles.timer_text}>
+                {`${cookProcess[count].workTime}:00`}
+              </Text>
             </View>
             <View>
               <Image
@@ -139,7 +141,7 @@ const CookProcess = ({ route }) => {
                 source={{ uri: cookProcess[count].completedDishImage }}
               />
             </View>
-            <Text style={styles.recipe_title}>豆腐を切ります</Text>
+            <Text style={styles.recipe_title}>{cookProcess[count].text}</Text>
           </View>
           <View style={styles.process_container}>
             <View>
@@ -167,31 +169,6 @@ const CookProcess = ({ route }) => {
     </View>
   );
 };
-
-{
-  /* <View>
-          <Image
-            // style={styles.recipiContainer}
-            source={{ uri: cookProcess[count].completedDishImage }}
-          />
-          <Image
-            // style={styles.recipiContainer}
-            source={{ uri: cookProcess[count].imagePath }}
-          />
-        </View> */
-}
-{
-  /* <View style={styles.processContainer}> */
-}
-{
-  /* <View>
-          <Text>{cookProcess[count].text}</Text>
-          <Image
-            // style={styles.processPic}
-            source={{ uri: cookProcess[count].imagePath }}
-          />
-        </View> */
-}
 
 const styles = StyleSheet.create({
   container: {

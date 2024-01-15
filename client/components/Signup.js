@@ -17,32 +17,38 @@ const Signup = ({ navigation }) => {
     setPassword(value);
   };
 
+  // const showSignupModal = () => {
+  //   if (name === "" || mailAddress === "" || password === "") {
+  //     Alert.alert("ユーザー情報を入力してください");
+  //   } else {
+  //     navigation.navigate("初期設定", [name, mailAddress, password]);
+  //   }
+  // };
   const showSignupModal = () => {
-    if (name === "" || mailAddress === "" || password === "") {
-      Alert.alert("ユーザー情報を入力してください");
-    } else {
-      navigation.navigate("初期設定", [name, mailAddress, password]);
-    }
+    navigation.navigate("初期設定", [name, mailAddress, password]);
   };
 
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.nameInput}
+        style={[styles.input, styles.input_username]}
         value={name}
-        placeholder="name"
+        keyboardType="numeric"
+        placeholder="ユーザー名"
         onChangeText={onChangeName}
       ></TextInput>
       <TextInput
-        style={styles.mailAddresInput}
+        style={styles.input}
         value={mailAddress}
-        placeholder="mail address"
+        keyboardType="numeric"
+        placeholder="メールアドレス"
         onChangeText={onChangeMailAddress}
       ></TextInput>
       <TextInput
-        style={styles.passwordInput}
+        style={styles.input}
         value={password}
-        placeholder="password"
+        keyboardType="numeric"
+        placeholder="パスワード"
         onChangeText={onChangePassword}
       ></TextInput>
       <Button
@@ -55,34 +61,22 @@ const Signup = ({ navigation }) => {
 };
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    backgroundColor: "#fff",
+    flex: 1,
+    backgroundColor: "#F8F7EE",
     alignItems: "center",
   },
-  nameInput: {
+  input: {
     height: 40,
     width: 300,
     padding: 10,
-    marginTop: 50,
-    marginBottom: 20,
-    borderColor: "black",
+    paddingLeft: 20,
+    borderColor: "#002F15",
     borderWidth: 1,
+    marginBottom: 20,
+    borderRadius: 40,
   },
-  mailAddresInput: {
-    height: 40,
-    width: 300,
-    padding: 10,
-    marginBottom: 20,
-    borderColor: "black",
-    borderWidth: 1,
-  },
-  passwordInput: {
-    height: 40,
-    width: 300,
-    padding: 10,
-    borderColor: "black",
-    borderWidth: 1,
-    marginBottom: 20,
+  input_username: {
+    marginTop: 80,
   },
 });
 export default Signup;
