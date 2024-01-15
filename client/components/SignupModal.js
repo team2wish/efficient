@@ -83,7 +83,27 @@ const SignupModal = ({ navigation, route }) => {
     }
   };
 
-  const allergyTitle = ["えび", "かに", "小麦", "蕎麦", "卵", "落花生"];
+  const allergyTitle = ["えび", "かに", "小麦", "蕎麦", "卵", "乳", "落花生"];
+
+  const checked = [
+    shrimpChecked,
+    crabChecked,
+    wheatChecked,
+    buckwheat_noodlesChecked,
+    eggChecked,
+    milkChecked,
+    peanutChecked,
+  ];
+  const setChecked = [
+    setShrimpChecked,
+    setCrabChecked,
+    setWheatChecked,
+    setBuckwheat_noodlesChecked,
+    setEggChecked,
+    setMilkChecked,
+    setPeanutChecked,
+  ];
+
   return (
     <View style={styles.container}>
       <View
@@ -128,27 +148,21 @@ const SignupModal = ({ navigation, route }) => {
         </View>
       </View>
       <Text style={styles.allergy_title}>アレルギー食材</Text>
-      {allergyTitle.map((item) => {
+      {allergyTitle.map((item, index) => {
         return (
-          <View style={styles.checkboxContainer}>
+          <View style={styles.checkboxContainer} key={index}>
             <Text style={styles.checkbox_title}>{item}</Text>
             <Checkbox
               style={styles.checkbox}
-              value={shrimpChecked}
-              onValueChange={setShrimpChecked}
+              value={checked[index]}
+              onValueChange={setChecked[index]}
             />
           </View>
         );
       })}
-      <TouchableOpacity style={styles.signup_button} onPress={childrencountAdd}>
+      <TouchableOpacity style={styles.signup_button} onPress={signupPost}>
         <Text style={styles.signup_text}>新規登録</Text>
       </TouchableOpacity>
-      {/* <Button
-        styles={styles.button}
-        // title="新規登録画面へ戻る"
-        title="新規登録"
-        onPress={signupPost}
-      /> */}
     </View>
   );
 };
