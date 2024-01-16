@@ -29,22 +29,26 @@ const Signup = ({ navigation }) => {
       <TextInput
         style={[styles.input, styles.input_username]}
         value={name}
-        keyboardType="numeric"
+        keyboardType="default"
+        autoCapitalize="none"
         placeholder="ユーザー名"
         onChangeText={onChangeName}
       ></TextInput>
       <TextInput
         style={styles.input}
         value={mailAddress}
-        keyboardType="numeric"
+        keyboardType="default"
+        autoCapitalize="none"
         placeholder="メールアドレス"
         onChangeText={onChangeMailAddress}
       ></TextInput>
       <TextInput
         style={styles.input}
         value={password}
-        keyboardType="numeric"
+        keyboardType="default"
+        autoCapitalize="none"
         placeholder="パスワード"
+        secureTextEntry={true}
         onChangeText={onChangePassword}
       ></TextInput>
       <Button

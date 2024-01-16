@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  // Keyboard,
   StyleSheet,
   View,
   Text,
@@ -16,7 +15,6 @@ import authApi from "../api/authApi";
 const Login = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [login, setLogin] = useState(false);
 
   const onChangeUsername = (value) => {
     setUsername(value);
@@ -52,7 +50,6 @@ const Login = ({ navigation }) => {
     try {
       const token = await AsyncStorage.getItem("my-key");
       if (token !== null) {
-        setLogin(true);
         await authApi.checkAuth(token);
         navigation.navigate("Home", { token: token, update: false });
       }
@@ -61,44 +58,44 @@ const Login = ({ navigation }) => {
     }
   };
 
+  const removeStore = () => {
+    AsyncStorage.removeItem("my-key");
+  };
+
   useEffect(() => {
-    setLogin(false);
+    // removeStore();
     getData();
   }, []);
 
   return (
-    <>
-      {login && (
-        <>
-          <View style={styles.container}>
-            <Image
-              source={require("../assets/kuma.png")}
-              style={styles.icon_image}
-            />
-            <TextInput
-              style={styles.input_username}
-              value={username}
-              placeholder="ユーザー名"
-              onChangeText={onChangeUsername}
-            ></TextInput>
-            <TextInput
-              style={styles.input_password}
-              value={password}
-              placeholder="パスワード"
-              onChangeText={onChangePassword}
-            ></TextInput>
-            <TouchableOpacity style={styles.button} onPress={loginFn}>
-              <Text style={styles.button_text}>ログイン</Text>
-            </TouchableOpacity>
-            <Button
-              styles={styles.button}
-              title="アカウント新規作成"
-              onPress={() => navigation.navigate("新規登録")}
-            />
-          </View>
-        </>
-      )}
-    </>
+    <View style={styles.container}>
+      <Image source={require("../assets/kuma.png")} style={styles.icon_image} />
+      <TextInput
+        style={styles.input_username}
+        value={username}
+        placeholder="ユーザー名"
+        keyboardType="default"
+        autoCapitalize="none"
+        onChangeText={onChangeUsername}
+      ></TextInput>
+      <TextInput
+        style={styles.input_password}
+        value={password}
+        placeholder="パスワード"
+        keyboardType="default"
+        autoCapitalize="none"
+        onChangeText={onChangePassword}
+        secureTextEntry={true}
+      ></TextInput>
+      <TouchableOpacity style={styles.button} onPress={loginFn}>
+        <Text style={styles.button_text}>ログイン</Text>
+      </TouchableOpacity>
+      <Button
+        styles={styles.button}
+        title="アカウント新規作成"
+        onPress={() => navigation.navigate("新規登録")}
+      />
+    </View>
   );
 };
 

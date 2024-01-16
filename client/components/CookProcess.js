@@ -23,7 +23,6 @@ const CookProcess = ({ route }) => {
   const token = route.params.token;
 
   const today = new Date();
-  const todayMonth = new Date().getMonth();
   const days = [
     "日曜日",
     "月曜日",
@@ -227,7 +226,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 5,
     marginRight: 20,
-    fontSize: 14,
+    fontSize: 24,
     fontWeight: "bold",
     color: "#002F15",
   },
