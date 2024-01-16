@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  Button,
   Image,
   StyleSheet,
   Alert,
@@ -55,17 +54,21 @@ const Recipes = ({ route }) => {
     }
   };
 
+  const days = ["月曜日", "火曜日", "水曜日", "木曜日", "金曜日"];
+
   return (
     <View style={styles.container}>
       {fiveRecipes && (
         <View style={styles.header__top}>
           <Text style={styles.header__date}>{`${fiveRecipes[0].date.slice(
-            5
+            0,
+            4
           )}`}</Text>
           <Text style={styles.header__days_color}>(月)</Text>
           <Text style={styles.header__days_color}> 〜 </Text>
           <Text style={styles.header__date}>{`${fiveRecipes[4].date.slice(
-            5
+            0,
+            4
           )}`}</Text>
           <Text style={styles.header__days_color}>(金)</Text>
         </View>
@@ -74,7 +77,7 @@ const Recipes = ({ route }) => {
       <GestureHandlerRootView>
         <ScrollView>
           {fiveRecipes &&
-            fiveRecipes.map((dateRecipe) => {
+            fiveRecipes.map((dateRecipe, index) => {
               const totalCookTime = dateRecipe.food.reduce(
                 (total, foodDetail) => total + foodDetail.time,
                 0
@@ -83,7 +86,10 @@ const Recipes = ({ route }) => {
                 <View key={dateRecipe.id} style={styles.recipes_container}>
                   <View style={styles.recipes__days_container}>
                     <Text style={styles.recipes__days}>
-                      {dateRecipe.date.slice(5)}{" "}
+                      {`${dateRecipe.date.slice(0, 4)} (${days[index].slice(
+                        0,
+                        1
+                      )})`}
                     </Text>
                     <View style={styles.timer}>
                       <Image
