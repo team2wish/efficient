@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import CookProcess from "../components/CookProcess";
 
-const CookProcessScreen = ({ navigation }) => {
+const CookProcessScreen = ({ route }) => {
   return (
     <View>
-      <CookProcess />
+      <CookProcess route={route} />
     </View>
   );
 };

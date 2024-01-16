@@ -16,22 +16,17 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.shun777.test"
+      "bundleIdentifier": "com.anonymous.test"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.shun777.test"
+      "package": "com.anonymous.test"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "2ddee4c8-deba-4fd9-bf44-bcf85df99e43"
-      }
     }
   }
 }

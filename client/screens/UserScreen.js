@@ -1,14 +1,7 @@
 import React from "react";
 import { View, Text, Button } from "react-native";
-// import { NavigationContainer } from "@react-navigation/native";
-// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import "react-native-gesture-handler";
-// import { Ionicons } from "@expo/vector-icons";
-
-// const Tab = createBottomTabNavigator();
 
 const UserScreen = ({ navigation }) => {
-  //   console.log(route);
   return (
     <View>
       <Text>ユーザ画面</Text>

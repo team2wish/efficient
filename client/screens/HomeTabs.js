@@ -1,25 +1,78 @@
 import React from "react";
-import { View, Text, Button } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CalendarScreen from "./CalendarScreen";
 import "react-native-gesture-handler";
 import RecipesScreen from "./RecipesScreen";
 import CookProcessScreen from "./CookProcessScreen";
 import ShoppingListScreen from "./ShoppingListScreen";
-// import { Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
-
-const HomeTabs = () => {
+const HomeTabs = ({ route }) => {
   return (
-    //移動先にデータ渡せる
-    //     onPress={() => navigation.navigate("User", { userId: 1 })}
-
     <Tab.Navigator>
-      <Tab.Screen name="Calendar" component={CalendarScreen} />
-      <Tab.Screen name="Recipes" component={RecipesScreen} />
-      <Tab.Screen name="ShoppingList" component={ShoppingListScreen} />
-      <Tab.Screen name="CookProcess" component={CookProcessScreen} />
+      <Tab.Screen
+        name="今週の献立"
+        options={{
+          headerStyle: {
+            shadowColor: "transparent",
+          },
+          headerTintColor: "#002F15",
+          headerTitleStyle: {
+            fontSize: 20,
+          },
+          tabBarIcon: () => (
+            <MaterialCommunityIcons
+              name="archive-edit-outline"
+              size={24}
+              color="black"
+            />
+          ),
+        }}
+      >
+        {() => <RecipesScreen route={route} />}
+      </Tab.Screen>
+      <Tab.Screen
+        name="買い物"
+        options={{
+          headerStyle: {
+            shadowColor: "transparent",
+          },
+          headerTintColor: "#002F15",
+          headerTitleStyle: {
+            fontSize: 20,
+          },
+          tabBarIcon: () => (
+            <MaterialCommunityIcons
+              name="shopping-outline"
+              size={24}
+              color="black"
+            />
+          ),
+        }}
+      >
+        {() => <ShoppingListScreen route={route} />}
+      </Tab.Screen>
+      <Tab.Screen
+        name="料理"
+        options={{
+          headerStyle: {
+            shadowColor: "transparent",
+          },
+          headerTintColor: "#002F15",
+          headerTitleStyle: {
+            fontSize: 20,
+          },
+          tabBarIcon: () => (
+            <MaterialCommunityIcons
+              name="clock-start"
+              size={24}
+              color="black"
+            />
+          ),
+        }}
+      >
+        {() => <CookProcessScreen route={route} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };
