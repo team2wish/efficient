@@ -37,7 +37,7 @@ const Signup = ({ navigation }) => {
       <TextInput
         style={styles.input}
         value={mailAddress}
-        keyboardType="default"
+        keyboardType="email-address"
         autoCapitalize="none"
         placeholder="メールアドレス"
         onChangeText={onChangeMailAddress}

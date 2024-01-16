@@ -14,7 +14,6 @@ export default function Memo() {
   const [todos, setTodos] = useState([]);
 
   const onPressItemDelete = (key) => {
-    // console.log("key", key);
     const newTodos = todos.filter((item) => item.key !== key);
     setTodos(newTodos);
   };

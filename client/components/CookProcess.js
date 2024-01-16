@@ -8,7 +8,6 @@ import {
   Image,
   Alert,
   TouchableOpacity,
-  Button,
 } from "react-native";
 import * as Speech from "expo-speech";
 import "../assets/icon.png";
@@ -35,13 +34,11 @@ const CookProcess = ({ route }) => {
   const getMonth = today.getMonth() + 1;
   const getDate = today.getDate();
   const getDay = days[today.getDay()].slice(0, 1);
-  // console.log(days[getDay]);
   const date = `${getMonth}/${getDate}`;
   const getCookProcess = async () => {
     try {
       const res = await recipesApi.getCooking(token);
       setCookProcess(res.data);
-      console.log(res.data);
       Speech.speak(res.data[0].text);
     } catch (e) {
       Alert.alert("セッションが切れました\n再度ログインしてください");
@@ -217,12 +214,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   recipe_image: {
-    width: 360,
-    height: 400,
+    width: 300,
+    height: 340,
     marginTop: 10,
     borderRadius: 10,
   },
   recipe_title: {
+    minHeight: 120,
     marginLeft: 20,
     marginTop: 5,
     marginRight: 20,
@@ -231,12 +229,10 @@ const styles = StyleSheet.create({
     color: "#002F15",
   },
   process_container: {
-    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   button: {
     alignItems: "flex-start",
